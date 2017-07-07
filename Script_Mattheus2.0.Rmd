@@ -7,24 +7,45 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+### load relevant packages
+
+library(tidyverse)
+library(foreign)
 ```
 
-## R Markdown
+Load data and select relevant variables
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## load raw data
 
-```{r cars}
-summary(cars)
+data2008 <- read.spss("C:/Data Mattheus 2.0/Sociale Index enquete 2008 edit.sav", use.value.labels = FALSE, to.data.frame = TRUE)
+
+View(data2008)
+
+#### select relevant variables, based on "Overzicht variabelen waves Wijkprofiel v2.xlsx"
+
+data2008sel <- data2008 %>% select(v1, v2, v3a, v4, v5, etni, v9, v12d, v13, v14a_1, v14a_2, v14a_3, v14a_4, v18a, v18b, v18c, v18d, v18e, v18f, v18g, v18h, v18i, v18j, v18k, v18l, v23b, v24a, v27, v28, v29a, v33, v48a, v48b, v48c, v49, v55a, buurt, ijssel, GEWICHT_STAD, WAVEID)
+
 ```
 
-## Including Plots
+Data transformations 
 
-You can also embed plots, for example:
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+## recode and rename variables
+
+class(data2008sel$v2)
+data2008sel$v2[data2008sel$v2==2] <- 0
+
+data2008sel <- data2008sel %>% rename(Age = v1, Male = v2)
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+
+
