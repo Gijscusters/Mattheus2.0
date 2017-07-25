@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(foreign)
+library(car)
 
 ```
 
@@ -37,56 +38,143 @@ Data transformations
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-## recode and rename variables
+### recode and rename variables
 
-#Gender
+##Gender
 data2008sel$v2[data2008sel$v2==2] <- 0
 v2_labels <- c("Female", "Male")
 data2008sel$v2 <- factor(data2008sel$v2, labels = v2_labels, ordered = FALSE)
 
-#Household
+##Household
 data2008sel$v3a <- recode(data2008sel$v3a, "5:12 = 5; 97:98=NA")
 v3a_labels <- c("SingleHH","Couplechild","Couplenochild","SingleparentHH","Other")
 data2008sel$v3a <- factor(data2008sel$v3a, labels = v3a_labels, ordered = FALSE)
 
-#Ethnicity
+##Ethnicity
 etni_labels <- c("Dutch", "Turkish", "Moroccan","Antillean", "Surinamese", "Cape-Verdean","Other")
 data2008sel$etni <- factor(data2008sel$etni, labels = etni_labels, ordered = FALSE)
 
-#Tenure
+##Tenure
 data2008sel$v9 <-recode(data2008sel$v9, "3=NA;2=1;1=0")
 v9_labels <- c("Rent", "Owner")
 data2008sel$v9 <- factor(data2008sel$v9, labels = v9_labels, ordered = FALSE)
 
-#Neigh_responsibility
+##Neigh_responsibility
 #response coding: 1=helemaal niet ... 5 = ja heel erg
 data2008sel$v13 <- 6 - data2008sel$v13
 data2008sel$v13[data2008sel$v13==0]<- NA
 
-#Neighb_involve
-data2008sel$v14a_1 <- recode(data2008sel$v14a_1, "5=0; 1:3=1")
+##Neighb_involve
+data2008sel$v14a_1R <- recode(data2008sel$v14a_1, "5=0; 1:3=1")
 v14a_1_labels <- c("No", "Yes")
-data2008sel$v14a_1 <- factor(data2008sel$v14a_1, labels = v14a_1_labels, ordered = FALSE)
+data2008sel$v14a_1R <- factor(data2008sel$v14a_1R, labels = v14a_1_labels, ordered = FALSE)
+
+#countvariable Neighb_involvement
+data2008sel$v14a_1count <- recode(data2008sel$v14a_1, "5=0; 1:3=1")
+data2008sel$v14a_2count <- recode(data2008sel$v14a_2, "1:3=1; NA=0")
+data2008sel$v14a_3count <- recode(data2008sel$v14a_3, "1:3=1; NA=0")
+
+data2008sel$Count_involve <- data2008sel$v14a_1count + data2008sel$v14a_2count + data2008sel$v14a_3count 
+
+## coding positive responses neighbourhood cohesion
+#Neigh_familiarity (0=helemaal mee eens ... 4=helemaal mee oneens)
+data2008sel$v18a[data2008sel$v18a==6] <- NA
+data2008sel$v18a <- data2008sel$v18a - 1
+
+#Neigh_joy_int (0=helemaal mee oneens ... 4=helemaal mee eens)
+data2008sel$v18b[data2008sel$v18b==6] <- NA
+data2008sel$v18b <- 5 - data2008sel$v18b
+
+#Neigh_cosy
+data2008sel$v18c[data2008sel$v18c==6] <- NA
+data2008sel$v18c <- 5 - data2008sel$v18c
+
+#Neigh_feelhome
+data2008sel$v18d[data2008sel$v18d==6] <- NA
+data2008sel$v18d <- 5 - data2008sel$v18d
+
+#Neigh_notnice
+data2008sel$v18e[data2008sel$v18e==6] <- NA
+data2008sel$v18e <- data2008sel$v18e - 1
+
+#Neigh_move
+data2008sel$v18f[data2008sel$v18f==6] <- NA
+data2008sel$v18f <- data2008sel$v18f - 1
+
+#Neigh_lucky
+data2008sel$v18g[data2008sel$v18g==6] <- NA
+data2008sel$v18g <- 5 - data2008sel$v18g
+
+#Neigh_treat
+data2008sel$v18h[data2008sel$v18h==6] <- NA
+data2008sel$v18h <- data2008sel$v18h - 1
+
+#Neigh_attitudes
+data2008sel$v18i[data2008sel$v18i==6] <- NA
+data2008sel$v18i <- 5 - data2008sel$v18i
+
+#Neigh_youngold
+data2008sel$v18j[data2008sel$v18j==6] <- NA
+data2008sel$v18j <- 5 - data2008sel$v18j
+
+#Neigh_problemsother
+data2008sel$v18k[data2008sel$v18k==6] <- NA
+data2008sel$v18k <- data2008sel$v18k - 1
+
+#Neigh_problem
+data2008sel$v18l[data2008sel$v18l==6] <- NA
+data2008sel$v18l <- data2008sel$v18l - 1
+
+##Municipality_support
+v23b_labels <- c("H mee eens", "mee eens","eens/oneens","mee oneens","h mee oneens","weet niet")
+data2008sel$v23b <- factor(data2008sel$v23b, labels = v23b_labels, ordered = FALSE)
+
+##Neigh_attachment
+data2008sel$v24a[data2008sel$v24a==6] <- NA
+data2008sel$v24a <- data2008sel$v24a - 1
+
+##Labour_status
+data2008sel$Labour_status[data2008sel$v28==1] <- 1
+data2008sel$Labour_status[data2008sel$v29a==3] <- 2
+data2008sel$Labour_status[data2008sel$v29a==1] <- 3
+data2008sel$Labour_status[data2008sel$v29a==2] <- 4
+data2008sel$Labour_status[data2008sel$v29a==4] <- 5
+data2008sel$Labour_status[data2008sel$v29a==7 | data2008sel$v29a==8] <- 6
+data2008sel$Labour_status[data2008sel$v29a==6] <- NA
+
+Labour_labels <- c("Works>12h","Unemployed/incapacitated","Student","Household","Retired", "Volunteer")
+data2008sel$Labour_status <- factor(data2008sel$Labour_status, labels = Labour_labels, ordered = FALSE) 
+
+##Volunteering
+data2008sel$v33[data2008sel$v33==2] <- 0
+
+##Dutch language
+data2008sel$v48a <- data2008sel$v48a - 1 
+data2008sel$v48b <- data2008sel$v48b - 1
+data2008sel$v48c <- data2008sel$v48c - 1
+
+##Health
+data2008sel$v49 <- 5 - data2008sel$v49
+
+##Education
+data2008sel$Educ_interval <- data2008sel$v55a
+data2008sel$Educ_interval[data2008sel$v55a==10] <- NA 
+
+data2008sel$Educ_ordinal <- recode(data2008sel$Educ_interval,"0:1=0;2:4=1;5:6=2;7:8=3")
+
+Educ_labels <- c("Low","Low-med","Medium","High")
+data2008sel$Educ_ordinal <- factor(data2008sel$Educ_ordinal, labels = Educ_labels, ordered = TRUE)
 
 
-
-#countvariable involvement (nog uit te vogelen hoe makkelijk te counten)
-data2008sel$v14a_2 <- recode(data2008sel$v14a_2, "1:3=1; NA=0")
-data2008sel$v14a_3 <- recode(data2008sel$v14a_3, "1:3=1; NA=0")
-
-data2008sel$Count_involve <- data2008sel$v14a_1 + data2008sel$v14a_2 + data2008sel$v14a_3 
-
-table(data2008sel$v14a_3, exclude = NULL)
-
-
-table(data2008sel$Count_involve, exclude = NULL)
-
-
+## Neighbourhood
+table(data2008sel$buurt, useNA = "always")
+table(data2008sel$ijssel, useNA = "always")
 
 
 #variable names recoding
 data2008sel <- data2008sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethnicity = etni, Tenure = v9,
-                                      Adress_years = v12d, Neigh_responsibility = v13, Neigh_involve = v14a_1)
+                                      Adress_years = v12d, Neigh_responsibility = v13, Neigh_involve = v14a_1R,
+                                      Neigh_familiarity = v18a, Neigh_joy_int = v18b, Neigh_cosy = v18c, Neigh_feelhome = v18d, Neigh_notnice = v18e, Neigh_move=v18f, Neigh_lucky=v18g,Neigh_treat=v18h,Neigh_attitudes=v18i,Neigh_youngold=v18j,Neigh_problemsother=v18k,Neigh_problem = v18l, Municipality_support = v23b, Neigh_attachment=v24a,Volunteering = v33, Dutch_read = v48a, Dutch_speak = v48b, Dutch_write = v48c, Health = v49)
 
 ```
 
