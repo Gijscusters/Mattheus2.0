@@ -166,15 +166,25 @@ Educ_labels <- c("Low","Low-med","Medium","High")
 data2008sel$Educ_ordinal <- factor(data2008sel$Educ_ordinal, labels = Educ_labels, ordered = TRUE)
 
 
-## Neighbourhood
-table(data2008sel$buurt, useNA = "always")
-table(data2008sel$ijssel, useNA = "always")
+## Neighbourhood (excl. Rozenburg[4]/Kop van Zuid[17])
 
+data2008sel$Wijk71 <- data2008sel$buurt
+data2008sel$Wijk71 <- recode(data2008sel$buurt, "2:3=3001;18:19=3003;27:28=3004")
+data2008sel$Wijk71[data2008sel$buurt==32 | data2008sel$buurt==58] <- 3011
+data2008sel$Wijk71[data2008sel$buurt==42 | data2008sel$buurt==43] <- 3005
+data2008sel$Wijk71[data2008sel$buurt==52 | data2008sel$buurt==54 | data2008sel$buurt==55 | data2008sel$buurt==57] <- 3006
+data2008sel$Wijk71[data2008sel$ijssel==1] <- 1009
+data2008sel$Wijk71[data2008sel$ijssel==2] <- 1010
 
 #variable names recoding
 data2008sel <- data2008sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethnicity = etni, Tenure = v9,
                                       Adress_years = v12d, Neigh_responsibility = v13, Neigh_involve = v14a_1R,
                                       Neigh_familiarity = v18a, Neigh_joy_int = v18b, Neigh_cosy = v18c, Neigh_feelhome = v18d, Neigh_notnice = v18e, Neigh_move=v18f, Neigh_lucky=v18g,Neigh_treat=v18h,Neigh_attitudes=v18i,Neigh_youngold=v18j,Neigh_problemsother=v18k,Neigh_problem = v18l, Municipality_support = v23b, Neigh_attachment=v24a,Volunteering = v33, Dutch_read = v48a, Dutch_speak = v48b, Dutch_write = v48c, Health = v49)
+
+##original variables that need to be dropped (buurt,ijssel,v55a,v27,v28,v29a,v14a_1,v14a_2,v14a_3,v14a_1count,v14a_2count,v14a_3count)?
+
+data2008seldef <- subset(data2008sel, select = -c(buurt,ijssel,v55a,v27,v28,v29a,v14a_1,v14a_2,v14a_3,v14a_1count,v14a_2count,v14a_3count))
+
 
 ```
 
