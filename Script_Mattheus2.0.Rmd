@@ -137,7 +137,7 @@ data2008sel$Labour_status[data2008sel$v29a==4] <- 5
 data2008sel$Labour_status[data2008sel$v29a==7 | data2008sel$v29a==8] <- 6
 data2008sel$Labour_status[data2008sel$v29a==6] <- NA
 
-Labour_labels <- c("Works>12h","Unemployed/incapacitated","Student","Household","Retired", "Volunteer")
+Labour_labels <- c("Works>12h","Unemployed/incapacitated","Student","Household","Retired", "Volunteer/Other")
 data2008sel$Labour_status <- factor(data2008sel$Labour_status, labels = Labour_labels, ordered = FALSE) 
 
 ##Volunteering
@@ -626,8 +626,6 @@ Data preparation 2013
 
 ##Adress_years => BRP!!
 
-##list variables: Age, Gender, Household, Ethnicity, Tenure, Adress_years,Neigh_responsibility, Neighb_involve, Neigh_familiarity, Neigh_joy_int, Neigh_cosy, Neigh_feelhome, Neigh_notnice, Neigh_move, Neigh_lucky, Neigh_treat, Neigh_attitudes, Neigh_youngold, Neigh_problemsother, Neigh_problem, Municipality_support, Neigh_attachment, Labour_status, Volunteering, Dutch_read, Dutch_speak, Dutch_write, Health, Education, Neighbourhood 
-
 ##load raw data 2013
 data2013 <- read.spss("C:/Data Mattheus 2.0/WO respons 2014 def (2013) edit.sav", use.value.labels = FALSE, to.data.frame = TRUE)
 
@@ -719,7 +717,7 @@ data2013sel$v39b <- factor(data2013sel$v39b, labels = v23b_labels, ordered = FAL
 
 ##Neigh_attachment
 data2013sel$v40a[data2013sel$v40a==6] <- NA
-data2013sel$v40a <- data2013sel$v40a - 1
+data2013sel$v40a <- 5 - data2013sel$v40a
 
 ##Labour_status
 data2013sel$Labour_status[data2013sel$v43==2] <- 1
@@ -764,4 +762,154 @@ data2013sel <- data2013sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethn
 data2013seldef <- subset(data2013sel, select = -c(gebcode,v71a,v43,v44a,v19a_1,v19a_2,v19a_3,v19a_1count,v19a_2count,v19a_3count))
 
 ```
+
+Data preparation 2015
+
+``` {r setup, include = FALSE}
+
+##Adress_years => BRP!!
+## not present: Neigh_joy_int
+
+##list variables: Age, Gender, Household, Ethnicity, Tenure, Adress_years,Neigh_responsibility, Neighb_involve, Neigh_familiarity, Neigh_joy_int, Neigh_cosy, Neigh_feelhome, Neigh_notnice, Neigh_move, Neigh_lucky, Neigh_treat, Neigh_attitudes, Neigh_youngold, Neigh_problemsother, Neigh_problem, Municipality_support, Neigh_attachment, Labour_status, Volunteering, Dutch_read, Dutch_speak, Dutch_write, Health, Education, Neighbourhood 
+
+##load raw data 2015
+data2015 <- read.spss("C:/Data Mattheus 2.0/Sociale Index enquete 2016 nieuwe versie edit.sav", use.value.labels = FALSE, to.data.frame = TRUE)
+
+##select relevant variables
+data2015sel <- data2015 %>% select(v1, v2, v3a, etniciteit_str, VN39, v18, v19_1, v19_2, v19_3,v19_4,v19_5, v26a, v26c, v26i, v22b, v22c, v22d, v26d, v26e, v27a, v26f, v22e, v39b, v40a, v43, v44a, v47, v73a, v73b, v73c, v61, v71a, Wijkprofielindeling, GEWICHT_STAD, WAVEID)
+
+##Gender
+data2015sel$v2[data2015sel$v2==2] <- 0
+data2015sel$v2 <- factor(data2015sel$v2, labels = v2_labels, ordered = FALSE)
+
+##Household
+data2015sel$v3a <- factor(data2015sel$v3a, labels = v3a_labels, ordered = FALSE)
+
+##Ethnicity
+data2015sel$etniciteit_str <- recode(as.numeric(data2015sel$etniciteit_str), "1=6;2=3;3=4;4=1;5=7;6=7;7=7;8=5;9=2")
+data2015sel$etniciteit_str <- factor(data2015sel$etniciteit_str, labels = etni_labels, ordered = FALSE)
+
+##Tenure
+data2015sel$VN39 <-recode(data2015sel$VN39, "1:7=0;9=1;99=NA")
+data2015sel$VN39 <- factor(data2015sel$VN39, labels = v9_labels, ordered = FALSE)
+
+##Neigh_responsibility
+data2015sel$v18[is.na(data2015sel$v18)]<- 4
+data2015sel$v18 <- factor(data2015sel$v18, labels = v13_labels, ordered = FALSE)
+
+##Neighb_involve
+data2015sel$v19R <- recode(data2015sel$v19_5, "1=0;0=1")
+data2015sel$v19R <- factor(data2015sel$v19R, labels = v14a_1_labels, ordered = FALSE)
+
+#countvariable Neighb_involvement
+data2015sel$v19_2count <- 0
+data2015sel$v19_2count[data2015sel$v19_1==1 & data2015sel$v19_2==1] <- 1 
+data2015sel$v19_2count[data2015sel$v19_1==1 & data2015sel$v19_3==1] <- 1
+data2015sel$v19_2count[data2015sel$v19_1==1 & data2015sel$v19_4==1] <- 1
+data2015sel$v19_2count[data2015sel$v19_2==1 & data2015sel$v19_3==1] <- 1
+data2015sel$v19_2count[data2015sel$v19_2==1 & data2015sel$v19_4==1] <- 1
+data2015sel$v19_2count[data2015sel$v19_3==1 & data2015sel$v19_4==1] <- 1
+
+data2015sel$v19_3count <- 0
+data2015sel$v19_3count[data2015sel$v19_1==1 & data2015sel$v19_2==1 & data2015sel$v19_3==1] <- 1
+data2015sel$v19_3count[data2015sel$v19_1==1 & data2015sel$v19_3==1 & data2015sel$v19_4==1] <- 1
+data2015sel$v19_3count[data2015sel$v19_1==1 & data2015sel$v19_2==1 & data2015sel$v19_4==1] <- 1
+data2015sel$v19_3count[data2015sel$v19_2==1 & data2015sel$v19_3==1 & data2015sel$v19_4==1] <- 1
+
+data2015sel$Count_involve <- as.numeric(data2015sel$v19R) + data2015sel$v19_2count + data2015sel$v19_3count
+
+## coding positive responses neighbourhood cohesion
+#Neigh_familiarity (0=helemaal mee eens ... 4=helemaal mee oneens)
+data2015sel$v26a[data2015sel$v26a==6] <- NA
+data2015sel$v26a <- data2015sel$v26a - 1
+
+#Neigh_cosy
+data2015sel$v26c[data2015sel$v26c==6] <- NA
+data2015sel$v26c <- 5 - data2015sel$v26c
+
+#Neigh_feelhome
+data2015sel$v26i[data2015sel$v26i==6|data2015sel$v26i==43] <- NA
+data2015sel$v26i <- 5 - data2015sel$v26i
+
+#Neigh_notnice
+data2015sel$v22b[data2015sel$v22b==6] <- NA
+data2015sel$v22b <- data2015sel$v22b - 1
+
+#Neigh_move
+data2015sel$v22c[data2015sel$v22c==6] <- NA
+data2015sel$v22c <- data2015sel$v22c - 1
+
+#Neigh_lucky
+data2015sel$v22d[data2015sel$v22d==6] <- NA
+data2015sel$v22d <- 5 - data2015sel$v22d
+
+#Neigh_treat
+data2015sel$v26d[data2015sel$v26d==6] <- NA
+data2015sel$v26d <- data2015sel$v26d - 1
+
+#Neigh_attitudes
+data2015sel$v26e[data2015sel$v26e==6] <- NA
+data2015sel$v26e <- 5 - data2015sel$v26e
+
+#Neigh_youngold
+data2015sel$v27a[data2015sel$v27a==6] <- NA
+data2015sel$v27a <- 5 - data2015sel$v27a
+
+#Neigh_problemsother
+data2015sel$v26f[data2015sel$v26f==6] <- NA
+data2015sel$v26f <- data2015sel$v26f - 1
+
+#Neigh_problem
+data2015sel$v22e[data2015sel$v22e==6] <- NA
+data2015sel$v22e <- data2015sel$v22e - 1
+
+##Municipality_support
+data2015sel$v39b <- factor(data2015sel$v39b, labels = v23b_labels, ordered = FALSE)
+
+##Neigh_attachment
+data2015sel$v40a[data2015sel$v40a==6] <- NA
+data2015sel$v40a <- 5 - data2015sel$v40a
+
+##Labour_status
+data2015sel$Labour_status[data2015sel$v43==2] <- 1
+data2015sel$Labour_status[data2015sel$v44a==3| data2015sel$v44a==2| data2015sel$v44a==4] <- 2
+data2015sel$Labour_status[data2015sel$v44a==6] <- 3
+data2015sel$Labour_status[data2015sel$v44a==5] <- 4
+data2015sel$Labour_status[data2015sel$v44a==1] <- 5
+data2015sel$Labour_status[data2015sel$v44a==7] <- 6
+data2015sel$Labour_status[data2015sel$v44a==8] <- NA
+
+data2015sel$Labour_status <- factor(data2015sel$Labour_status, labels = Labour_labels, ordered = FALSE) 
+
+##Volunteering
+data2015sel$v47[data2015sel$v47==2] <- 0
+
+##Dutch language
+data2015sel$v73a <- data2015sel$v73a - 1 
+data2015sel$v73b <- data2015sel$v73b - 1
+data2015sel$v73c <- data2015sel$v73c - 1
+
+##Health
+data2015sel$v61 <- 5 - data2015sel$v61
+
+##Education
+data2015sel$Educ_interval <- data2015sel$v71a
+data2015sel$Educ_interval[data2015sel$Educ_interval==12|data2015sel$Educ_interval==11]<- NA 
+data2015sel$Educ_interval <- recode(data2015sel$Educ_interval,"1=0;2=1;3=2;4=3;6=3;5=4;7:8=5;9=6;10=7")
+
+data2015sel$Educ_ordinal <- recode(data2015sel$Educ_interval,"0:1=0;2:3=1;4:5=2;6:7=3")
+data2015sel$Educ_ordinal <- factor(data2015sel$Educ_ordinal, labels = Educ_labels, ordered = TRUE)
+
+## Neighbourhood:Wijk71 
+data2015sel <- data2015sel %>% separate(Wijkprofielindeling,c("Wijk71","Name"), sep = ". ")
+data2015sel$Wijk71 <- recode(data2015sel$Wijk71, "01=1;04=4")
+
+#variable names recoding
+data2015sel <- data2015sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethnicity = etniciteit_str, Tenure = VN39, Neigh_responsibility = v18, Neigh_involve = v19R, Neigh_familiarity = v26a, Neigh_cosy = v26c, Neigh_feelhome = v26i, Neigh_notnice = v22b, Neigh_move=v22c, Neigh_lucky=v22d,  Neigh_treat=v26d, Neigh_attitudes=v26e, Neigh_youngold=v27a, Neigh_problemsother=v26f, Neigh_problem = v22e, Municipality_support = v39b, Neigh_attachment=v40a,Volunteering = v47, Dutch_read = v73a, Dutch_speak = v73b, Dutch_write = v73c, Health = v61)
+
+##original variables that need to be dropped 
+data2015seldef <- subset(data2015sel, select = -c(v71a,v43,v44a,v19_1,v19_2,v19_3,v19_4,v19_5,v19_2count,v19_3count,Name))
+
+```
+
 
