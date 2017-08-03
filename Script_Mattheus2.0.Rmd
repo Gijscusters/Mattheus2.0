@@ -14,6 +14,8 @@ library(tidyverse)
 library(foreign)
 library(car)
 
+##list variables: Age, Gender, Household, Ethnicity, Tenure, Adress_years,Neigh_responsibility, Neighb_involve, Contact_neighbours, Contact_othernei, Neigh_familiarity, Neigh_joy_int, Neigh_cosy, Neigh_feelhome, Neigh_notnice, Neigh_move, Neigh_lucky, Neigh_treat, Neigh_attitudes, Neigh_youngold, Neigh_problemsother, Neigh_problem, Municipality_support, Neigh_attachment, Labour_status, Volunteering, Dutch_read, Dutch_speak, Dutch_write, Health, Education, Neighbourhood  
+
 ```
 
 Load data and select relevant variables, 2008 (base dataset)
@@ -29,7 +31,7 @@ data2008 <- read.spss("C:/Data Mattheus 2.0/Sociale Index enquete 2008 edit.sav"
 
 #### select relevant variables, based on "Overzicht variabelen waves Wijkprofiel v2.xlsx"
 
-data2008sel <- data2008 %>% select(v1, v2, v3a, etni, v9, v12d, v13, v14a_1, v14a_2, v14a_3, v18a, v18b, v18c, v18d, v18e, v18f, v18g, v18h, v18i, v18j, v18k, v18l, v23b, v24a, v28, v29a, v33, v48a, v48b, v48c, v49, v55a, buurt, ijssel, GEWICHT_STAD, WAVEID)
+data2008sel <- data2008 %>% select(v1, v2, v3a, etni, v9, v12d, v13, v14a_1, v14a_2, v14a_3, v16, v17, v18a, v18b, v18c, v18d, v18e, v18f, v18g, v18h, v18i, v18j, v18k, v18l, v23b, v24a, v28, v29a, v33, v48a, v48b, v48c, v49, v55a, buurt, ijssel, GEWICHT_STAD, WAVEID)
 
 ### recode and rename variables ###
 
@@ -70,6 +72,12 @@ data2008sel$v14a_2count <- recode(data2008sel$v14a_2, "1:3=1; NA=0")
 data2008sel$v14a_3count <- recode(data2008sel$v14a_3, "1:3=1; NA=0")
 
 data2008sel$Count_involve <- data2008sel$v14a_1count + data2008sel$v14a_2count + data2008sel$v14a_3count 
+
+##Contact_neighbours
+data2008sel$v16 <- 5 - data2008sel$v16
+
+##Contact_othernei
+data2008sel$v17 <- 5 - data2008sel$v17
 
 ## coding positive responses neighbourhood cohesion
 #Neigh_familiarity (0=helemaal mee eens ... 4=helemaal mee oneens)
@@ -173,8 +181,7 @@ data2008sel$Wijk71[data2008sel$ijssel==2] <- 1010
 
 #variable names recoding
 data2008sel <- data2008sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethnicity = etni, Tenure = v9,
-                                      Adress_years = v12d, Neigh_responsibility = v13, Neigh_involve = v14a_1R,
-                                      Neigh_familiarity = v18a, Neigh_joy_int = v18b, Neigh_cosy = v18c, Neigh_feelhome = v18d, Neigh_notnice = v18e, Neigh_move=v18f, Neigh_lucky=v18g,Neigh_treat=v18h,Neigh_attitudes=v18i,Neigh_youngold=v18j,Neigh_problemsother=v18k,Neigh_problem = v18l, Municipality_support = v23b, Neigh_attachment=v24a,Volunteering = v33, Dutch_read = v48a, Dutch_speak = v48b, Dutch_write = v48c, Health = v49)
+                                      Adress_years = v12d, Neigh_responsibility = v13, Neigh_involve = v14a_1R, Contact_neighbours = v16, Contact_othernei = v17, Neigh_familiarity = v18a, Neigh_joy_int = v18b, Neigh_cosy = v18c, Neigh_feelhome = v18d, Neigh_notnice = v18e, Neigh_move=v18f, Neigh_lucky=v18g,Neigh_treat=v18h,Neigh_attitudes=v18i,Neigh_youngold=v18j,Neigh_problemsother=v18k,Neigh_problem = v18l, Municipality_support = v23b, Neigh_attachment=v24a,Volunteering = v33, Dutch_read = v48a, Dutch_speak = v48b, Dutch_write = v48c, Health = v49)
 
 ##original variables that need to be dropped 
 
@@ -190,7 +197,7 @@ Data preparation 2009
 data2009 <- read.spss("C:/Data Mattheus 2.0/Sociale Index enquete 2009 edit.sav", use.value.labels = FALSE, to.data.frame = TRUE)
 
 ##selection relevant variables
-data2009sel <- data2009 %>% select(v1, v2, v3a, etni, v9, v12d, v13, v14a_1, v14a_2, v14a_3, v18a, v18b, v18c, v18d, v18e, v18f, v18g, v18h, v18i, v18j, v18k, v18l, v23b, v24a, v28, v29a, v33, v48a, v48b, v48c, v49, v55a, buurt, ijssel, GEWICHT_STAD, WAVEID)
+data2009sel <- data2009 %>% select(v1, v2, v3a, etni, v9, v12d, v13, v14a_1, v14a_2, v14a_3, v16, v17, v18a, v18b, v18c, v18d, v18e, v18f, v18g, v18h, v18i, v18j, v18k, v18l, v23b, v24a, v28, v29a, v33, v48a, v48b, v48c, v49, v55a, buurt, ijssel, GEWICHT_STAD, WAVEID)
 
 ##Gender
 data2009sel$v2[data2009sel$v2==2] <- 0
@@ -223,6 +230,12 @@ data2009sel$v14a_2count <- recode(data2009sel$v14a_2, "1:3=1; NA=0")
 data2009sel$v14a_3count <- recode(data2009sel$v14a_3, "1:3=1; NA=0")
 
 data2009sel$Count_involve <- data2009sel$v14a_1count + data2009sel$v14a_2count + data2009sel$v14a_3count 
+
+##Contact_neighbours
+data2009sel$v16 <- 5 - data2009sel$v16
+
+##Contact_othernei
+data2009sel$v17 <- 5 - data2009sel$v17
 
 ## coding positive responses neighbourhood cohesion
 #Neigh_familiarity (0=helemaal mee eens ... 4=helemaal mee oneens)
@@ -322,8 +335,7 @@ data2009sel$Wijk71[data2009sel$ijssel==2] <- 1010
 
 ##variable names recoding
 data2009sel <- data2009sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethnicity = etni, Tenure = v9,
-                                      Adress_years = v12d, Neigh_responsibility = v13, Neigh_involve = v14a_1R,
-                                      Neigh_familiarity = v18a, Neigh_joy_int = v18b, Neigh_cosy = v18c, Neigh_feelhome = v18d, Neigh_notnice = v18e, Neigh_move=v18f, Neigh_lucky=v18g,Neigh_treat=v18h,Neigh_attitudes=v18i,Neigh_youngold=v18j,Neigh_problemsother=v18k,Neigh_problem = v18l, Municipality_support = v23b, Neigh_attachment=v24a,Volunteering = v33, Dutch_read = v48a, Dutch_speak = v48b, Dutch_write = v48c, Health = v49)
+                                      Adress_years = v12d, Neigh_responsibility = v13, Neigh_involve = v14a_1R,Contact_neighbours = v16, Contact_othernei = v17,  Neigh_familiarity = v18a, Neigh_joy_int = v18b, Neigh_cosy = v18c, Neigh_feelhome = v18d, Neigh_notnice = v18e, Neigh_move=v18f, Neigh_lucky=v18g,Neigh_treat=v18h,Neigh_attitudes=v18i,Neigh_youngold=v18j,Neigh_problemsother=v18k,Neigh_problem = v18l, Municipality_support = v23b, Neigh_attachment=v24a,Volunteering = v33, Dutch_read = v48a, Dutch_speak = v48b, Dutch_write = v48c, Health = v49)
 
 ##original variables that need to be dropped 
 
@@ -339,7 +351,7 @@ Data preparation 2010
 data2010 <- read.spss("C:/Data Mattheus 2.0/Sociale Index enquete 2010 edit.sav", use.value.labels = FALSE, to.data.frame = TRUE)
 
 ##selection relevant variables
-data2010sel <- data2010 %>% select(v1, v2, v3a, etni, v9, v12d, v13, v14a_1, v14a_2, v14a_3, v18a, v18b, v18c, v18d, v18e, v18f, v18g, v18h, v18i, v18j, v18k, v18l, v23b, v24a, v28, v29a, v33, v48a, v48b, v48c, v49, v55a, buurt, ijssel, GEWICHT_STAD, WAVEID)
+data2010sel <- data2010 %>% select(v1, v2, v3a, etni, v9, v12d, v13, v14a_1, v14a_2, v14a_3, v16, v17, v18a, v18b, v18c, v18d, v18e, v18f, v18g, v18h, v18i, v18j, v18k, v18l, v23b, v24a, v28, v29a, v33, v48a, v48b, v48c, v49, v55a, buurt, ijssel, GEWICHT_STAD, WAVEID)
 
 ##Gender
 data2010sel$v2[data2010sel$v2==2] <- 0
@@ -370,6 +382,12 @@ data2010sel$v14a_2count <- recode(data2010sel$v14a_2, "1:3=1; NA=0")
 data2010sel$v14a_3count <- recode(data2010sel$v14a_3, "1:3=1; NA=0")
 
 data2010sel$Count_involve <- data2010sel$v14a_1count + data2010sel$v14a_2count + data2010sel$v14a_3count
+
+##Contact_neighbours
+data2010sel$v16 <- 5 - data2010sel$v16
+
+##Contact_othernei
+data2010sel$v17 <- 5 - data2010sel$v17
 
 ## coding positive responses neighbourhood cohesion
 #Neigh_familiarity (0=helemaal mee eens ... 4=helemaal mee oneens)
@@ -467,9 +485,7 @@ data2010sel$Wijk71[data2010sel$ijssel==1] <- 1009
 data2010sel$Wijk71[data2010sel$ijssel==2] <- 1010
 
 #variable names recoding
-data2010sel <- data2010sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethnicity = etni, Tenure = v9,
-                                      Adress_years = v12d, Neigh_responsibility = v13, Neigh_involve = v14a_1R,
-                                      Neigh_familiarity = v18a, Neigh_joy_int = v18b, Neigh_cosy = v18c, Neigh_feelhome = v18d, Neigh_notnice = v18e, Neigh_move=v18f, Neigh_lucky=v18g,Neigh_treat=v18h,Neigh_attitudes=v18i,Neigh_youngold=v18j,Neigh_problemsother=v18k,Neigh_problem = v18l, Municipality_support = v23b, Neigh_attachment=v24a,Volunteering = v33, Dutch_read = v48a, Dutch_speak = v48b, Dutch_write = v48c, Health = v49)
+data2010sel <- data2010sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethnicity = etni, Tenure = v9, Adress_years = v12d, Neigh_responsibility = v13, Neigh_involve = v14a_1R,Contact_neighbours = v16, Contact_othernei = v17,  Neigh_familiarity = v18a, Neigh_joy_int = v18b, Neigh_cosy = v18c, Neigh_feelhome = v18d, Neigh_notnice = v18e, Neigh_move=v18f, Neigh_lucky=v18g,Neigh_treat=v18h,Neigh_attitudes=v18i,Neigh_youngold=v18j,Neigh_problemsother=v18k,Neigh_problem = v18l, Municipality_support = v23b, Neigh_attachment=v24a,Volunteering = v33, Dutch_read = v48a, Dutch_speak = v48b, Dutch_write = v48c, Health = v49)
 
 ##original variables that need to be dropped 
 
@@ -481,13 +497,13 @@ Data preparation 2011
 
 ``` {r setup, include = FALSE}
 
-##Adress_years => BRP??
+##Adress_years => BRP?? Ask Dick
 
 ##load raw data 2011
 data2011 <- read.spss("C:/Data Mattheus 2.0/Sociale Index enquete 2011 nieuwe versie edit.sav", use.value.labels = FALSE, to.data.frame = TRUE)
 
 ##select relevant variables
-data2011sel <- data2011 %>% select(v1, v2, v3a, st_etni, v10, v18, v19a_1, v19a_2, v19a_3, v22a, v22b, v22c, v22d, v22e, v22f, v22g, v22h, v22i, v22j, v22k, v22l, v27b, v28a, v34, v35a, v37, v51a, v51b, v51c, v53, v62a, gebcode, GEWICHT_STAD, WAVEID)
+data2011sel <- data2011 %>% select(v1, v2, v3a, st_etni, v10, v18, v19a_1, v19a_2, v19a_3, v42c,v42d, v22a, v22b, v22c, v22d, v22e, v22f, v22g, v22h, v22i, v22j, v22k, v22l, v27b, v28a, v34, v35a, v37, v51a, v51b, v51c, v53, v62a, gebcode, GEWICHT_STAD, WAVEID)
 
 ##Gender
 data2011sel$v2[data2011sel$v2==2] <- 0
@@ -519,6 +535,14 @@ data2011sel$v19a_2count <- recode(data2011sel$v19a_2, "1:3=1; NA=0")
 data2011sel$v19a_3count <- recode(data2011sel$v19a_3, "1:3=1; NA=0")
 
 data2011sel$Count_involve <- data2011sel$v19a_1count + data2011sel$v19a_2count + data2011sel$v19a_3count
+
+##Contact_neighbours
+data2011sel$v42c <- recode(data2011sel$v42c, "1:2=2")
+data2011sel$v42c <- 6 - data2011sel$v42c
+
+##Contact_othernei
+data2011sel$v42d <- recode(data2011sel$v42d, "1:2=2")
+data2011sel$v42d <- 6 - data2011sel$v42d
 
 ## coding positive responses neighbourhood cohesion
 #Neigh_familiarity (0=helemaal mee eens ... 4=helemaal mee oneens)
@@ -612,7 +636,7 @@ data2011sel$Wijk71 <- data2011sel$gebcode
 data2011sel$Wijk71 <- recode(data2011sel$gebcode, "2=3001;18=3003;26=3004;32=3011;42=3005;52=3006;189=1009;289=1010")
 
 #variable names recoding
-data2011sel <- data2011sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethnicity = st_etni, Tenure = v10, Neigh_responsibility = v18, Neigh_involve = v19a_1R, Neigh_familiarity = v22a, Neigh_joy_int = v22b, Neigh_cosy = v22c, Neigh_feelhome = v22d, Neigh_notnice = v22e, Neigh_move=v22f, Neigh_lucky=v22g,Neigh_treat=v22h,Neigh_attitudes=v22i,Neigh_youngold=v22j,Neigh_problemsother=v22k,Neigh_problem = v22l, Municipality_support = v27b, Neigh_attachment=v28a,Volunteering = v37, Dutch_read = v51a, Dutch_speak = v51b, Dutch_write = v51c, Health = v53)
+data2011sel <- data2011sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethnicity = st_etni, Tenure = v10, Neigh_responsibility = v18, Neigh_involve = v19a_1R, Contact_neighbours = v42c, Contact_othernei = v42d, Neigh_familiarity = v22a, Neigh_joy_int = v22b, Neigh_cosy = v22c, Neigh_feelhome = v22d, Neigh_notnice = v22e, Neigh_move=v22f, Neigh_lucky=v22g,Neigh_treat=v22h,Neigh_attitudes=v22i,Neigh_youngold=v22j,Neigh_problemsother=v22k,Neigh_problem = v22l, Municipality_support = v27b, Neigh_attachment=v28a,Volunteering = v37, Dutch_read = v51a, Dutch_speak = v51b, Dutch_write = v51c, Health = v53)
 
 ##original variables that need to be dropped 
 
@@ -624,13 +648,13 @@ Data preparation 2013
 
 ``` {r setup, include = FALSE}
 
-##Adress_years => BRP!!
+##Adress_years => BRP!
 
 ##load raw data 2013
 data2013 <- read.spss("C:/Data Mattheus 2.0/WO respons 2014 def (2013) edit.sav", use.value.labels = FALSE, to.data.frame = TRUE)
 
 ##select relevant variables
-data2013sel <- data2013 %>% select(v1, v2, v3a, st_etni, v8, v18, v19a_1, v19a_2, v19a_3, v26a, v26b, v26c, v26i, v22b, v22c, v22d, v26d, v26e, v27a, v26f, v22e, v39b, v40a, v43, v44a, v47, v73a, v73b, v73c, v61, v71a, gebcode, GEWICHT_STAD, WAVEID)
+data2013sel <- data2013 %>% select(v1, v2, v3a, st_etni, v8, v18, v19a_1, v19a_2, v19a_3, v52c, v52d, v26a, v26b, v26c, v26i, v22b, v22c, v22d, v26d, v26e, v27a, v26f, v22e, v39b, v40a, v43, v44a, v47, v73a, v73b, v73c, v61, v71a, gebcode, GEWICHT_STAD, WAVEID)
 
 ##Gender
 data2013sel$v2[data2013sel$v2==2] <- 0
@@ -662,6 +686,14 @@ data2013sel$v19a_2count <- recode(data2013sel$v19a_2, "1:3=1; NA=0")
 data2013sel$v19a_3count <- recode(data2013sel$v19a_3, "1:3=1; NA=0")
 
 data2013sel$Count_involve <- data2013sel$v19a_1count + data2013sel$v19a_2count + data2013sel$v19a_3count
+
+##Contact_neighbours
+data2013sel$v52c <- recode(data2013sel$v52c, "1:2=2")
+data2013sel$v52c <- 6 - data2013sel$v52c
+
+##Contact_othernei
+data2013sel$v52d <- recode(data2013sel$v52d, "1:2=2")
+data2013sel$v52d <- 6 - data2013sel$v52d
 
 ## coding positive responses neighbourhood cohesion
 #Neigh_familiarity (0=helemaal mee eens ... 4=helemaal mee oneens)
@@ -754,12 +786,18 @@ data2013sel$Educ_ordinal <- factor(data2013sel$Educ_ordinal, labels = Educ_label
 data2013sel$Wijk71 <- data2013sel$gebcode
 data2013sel$Wijk71 <- recode(data2013sel$gebcode, "2=3001;18=3003;26=3004;32=3011;42=3005;52=3006;189=1009;289=1010")
 
+## Adress_years
+Woon2013 <- read.csv("C:/Data Mattheus 2.0/Woonduur 2013 WAVEID.csv", sep = ";")
+data2013sel <- inner_join(data2013sel, Woon2013)
+data2013sel$Adress_years <- data2013sel$Aantal_maanden_op_adres / 12
+data2013sel$Adress_years <- round(data2013sel$Adress_years, digits = 4)
+
 #variable names recoding
-data2013sel <- data2013sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethnicity = st_etni, Tenure = v8, Neigh_responsibility = v18, Neigh_involve = v19a_1R, Neigh_familiarity = v26a, Neigh_joy_int = v26b, Neigh_cosy = v26c, Neigh_feelhome = v26i, Neigh_notnice = v22b, Neigh_move=v22c, Neigh_lucky=v22d,  Neigh_treat=v26d, Neigh_attitudes=v26e, Neigh_youngold=v27a, Neigh_problemsother=v26f, Neigh_problem = v22e, Municipality_support = v39b, Neigh_attachment=v40a,Volunteering = v47, Dutch_read = v73a, Dutch_speak = v73b, Dutch_write = v73c, Health = v61)
+data2013sel <- data2013sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethnicity = st_etni, Tenure = v8, Neigh_responsibility = v18, Neigh_involve = v19a_1R, Contact_neighbours = v52c, Contact_othernei = v52d, Neigh_familiarity = v26a, Neigh_joy_int = v26b, Neigh_cosy = v26c, Neigh_feelhome = v26i, Neigh_notnice = v22b, Neigh_move=v22c, Neigh_lucky=v22d,  Neigh_treat=v26d, Neigh_attitudes=v26e, Neigh_youngold=v27a, Neigh_problemsother=v26f, Neigh_problem = v22e, Municipality_support = v39b, Neigh_attachment=v40a,Volunteering = v47, Dutch_read = v73a, Dutch_speak = v73b, Dutch_write = v73c, Health = v61)
 
 ##original variables that need to be dropped 
 
-data2013seldef <- subset(data2013sel, select = -c(gebcode,v71a,v43,v44a,v19a_1,v19a_2,v19a_3,v19a_1count,v19a_2count,v19a_3count))
+data2013seldef <- subset(data2013sel, select = -c(gebcode,v71a,v43,v44a,v19a_1,v19a_2,v19a_3,v19a_1count,v19a_2count,v19a_3count,unieknummer,Aantal_maanden_op_adres))
 
 ```
 
@@ -770,13 +808,13 @@ Data preparation 2015
 ##Adress_years => BRP!!
 ## not present: Neigh_joy_int
 
-##list variables: Age, Gender, Household, Ethnicity, Tenure, Adress_years,Neigh_responsibility, Neighb_involve, Neigh_familiarity, Neigh_joy_int, Neigh_cosy, Neigh_feelhome, Neigh_notnice, Neigh_move, Neigh_lucky, Neigh_treat, Neigh_attitudes, Neigh_youngold, Neigh_problemsother, Neigh_problem, Municipality_support, Neigh_attachment, Labour_status, Volunteering, Dutch_read, Dutch_speak, Dutch_write, Health, Education, Neighbourhood 
+
 
 ##load raw data 2015
 data2015 <- read.spss("C:/Data Mattheus 2.0/Sociale Index enquete 2016 nieuwe versie edit.sav", use.value.labels = FALSE, to.data.frame = TRUE)
 
 ##select relevant variables
-data2015sel <- data2015 %>% select(v1, v2, v3a, etniciteit_str, VN39, v18, v19_1, v19_2, v19_3,v19_4,v19_5, v26a, v26c, v26i, v22b, v22c, v22d, v26d, v26e, v27a, v26f, v22e, v39b, v40a, v43, v44a, v47, v73a, v73b, v73c, v61, v71a, Wijkprofielindeling, GEWICHT_STAD, WAVEID)
+data2015sel <- data2015 %>% select(v1, v2, v3a, etniciteit_str, VN39, v18, v19_1, v19_2, v19_3,v19_4,v19_5, v52c,v52d, v26a, v26c, v26i, v22b, v22c, v22d, v26d, v26e, v27a, v26f, v22e, v39b, v40a, v43, v44a, v47, v73a, v73b, v73c, v61, v71a, Wijkprofielindeling, GEWICHT_STAD, WAVEID)
 
 ##Gender
 data2015sel$v2[data2015sel$v2==2] <- 0
@@ -817,6 +855,14 @@ data2015sel$v19_3count[data2015sel$v19_1==1 & data2015sel$v19_2==1 & data2015sel
 data2015sel$v19_3count[data2015sel$v19_2==1 & data2015sel$v19_3==1 & data2015sel$v19_4==1] <- 1
 
 data2015sel$Count_involve <- as.numeric(data2015sel$v19R) + data2015sel$v19_2count + data2015sel$v19_3count
+
+##Contact_neighbours
+data2015sel$v52c <- recode(data2015sel$v52c, "1:2=2")
+data2015sel$v52c <- 6 - data2015sel$v52c
+
+##Contact_othernei
+data2015sel$v52d <- recode(data2015sel$v52d, "1:2=2")
+data2015sel$v52d <- 6 - data2015sel$v52d
 
 ## coding positive responses neighbourhood cohesion
 #Neigh_familiarity (0=helemaal mee eens ... 4=helemaal mee oneens)
@@ -904,11 +950,18 @@ data2015sel$Educ_ordinal <- factor(data2015sel$Educ_ordinal, labels = Educ_label
 data2015sel <- data2015sel %>% separate(Wijkprofielindeling,c("Wijk71","Name"), sep = ". ")
 data2015sel$Wijk71 <- recode(data2015sel$Wijk71, "01=1;04=4")
 
+## Adress_years
+Woon2015 <- read.csv("C:/Data Mattheus 2.0/Woonduur 2015 WAVEID.csv", sep = ";")
+data2015sel <- inner_join(data2015sel, Woon2015)
+data2015sel$Adress_years <- as.numeric(data2015sel$Aantal_maanden_op_adres) / 12
+data2015sel$Adress_years <- round(data2015sel$Adress_years, digits = 4)
+
+
 #variable names recoding
-data2015sel <- data2015sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethnicity = etniciteit_str, Tenure = VN39, Neigh_responsibility = v18, Neigh_involve = v19R, Neigh_familiarity = v26a, Neigh_cosy = v26c, Neigh_feelhome = v26i, Neigh_notnice = v22b, Neigh_move=v22c, Neigh_lucky=v22d,  Neigh_treat=v26d, Neigh_attitudes=v26e, Neigh_youngold=v27a, Neigh_problemsother=v26f, Neigh_problem = v22e, Municipality_support = v39b, Neigh_attachment=v40a,Volunteering = v47, Dutch_read = v73a, Dutch_speak = v73b, Dutch_write = v73c, Health = v61)
+data2015sel <- data2015sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethnicity = etniciteit_str, Tenure = VN39, Neigh_responsibility = v18, Neigh_involve = v19R, Contact_neighbours = v52c, Contact_othernei = v52d, Neigh_familiarity = v26a, Neigh_cosy = v26c, Neigh_feelhome = v26i, Neigh_notnice = v22b, Neigh_move=v22c, Neigh_lucky=v22d,  Neigh_treat=v26d, Neigh_attitudes=v26e, Neigh_youngold=v27a, Neigh_problemsother=v26f, Neigh_problem = v22e, Municipality_support = v39b, Neigh_attachment=v40a,Volunteering = v47, Dutch_read = v73a, Dutch_speak = v73b, Dutch_write = v73c, Health = v61)
 
 ##original variables that need to be dropped 
-data2015seldef <- subset(data2015sel, select = -c(v71a,v43,v44a,v19_1,v19_2,v19_3,v19_4,v19_5,v19_2count,v19_3count,Name))
+data2015seldef <- subset(data2015sel, select = -c(v71a,v43,v44a,v19_1,v19_2,v19_3,v19_4,v19_5,v19_2count,v19_3count,Name, Codeuniektxt,Aantal_maanden_op_adres))
 
 ```
 
