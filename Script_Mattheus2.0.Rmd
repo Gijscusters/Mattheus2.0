@@ -10,11 +10,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### load relevant packages
 
+library(Hmisc)
 library(tidyverse)
 library(foreign)
 library(car)
 
-##list variables: Age, Gender, Household, Ethnicity, Tenure, Adress_years,Neigh_responsibility, Neighb_involve, Contact_neighbours, Contact_othernei, Neigh_familiarity, Neigh_joy_int, Neigh_cosy, Neigh_feelhome, Neigh_notnice, Neigh_move, Neigh_lucky, Neigh_treat, Neigh_attitudes, Neigh_youngold, Neigh_problemsother, Neigh_problem, Municipality_support, Neigh_attachment, Labour_status, Volunteering, Dutch_read, Dutch_speak, Dutch_write, Health, Education, Neighbourhood  
+##list variables: Age, Gender, Household, Ethnicity, Tenure, Adress_years,Neigh_responsibility, Neighb_involve, Contact_neighbours, Contact_othernei, Neigh_familiarity, Neigh_joy_int, Neigh_cosy, Neigh_feelhome, Neigh_notnice, Neigh_move, Neigh_lucky, Neigh_treat, Neigh_attitudes, Neigh_youngold, Neigh_problemsother, Neigh_problem, Municipality_support, Neigh_attachment, Labour_status, Volunteering, Dutch_read, Dutch_speak, Dutch_write, Health, Education, Neighbourhood, Wijk71,	Low_40, Disposable_income,	Perc_unemployed,	Perc_benefits,	Herf_div
+
 
 ```
 
@@ -31,7 +33,7 @@ data2008 <- read.spss("C:/Data Mattheus 2.0/Sociale Index enquete 2008 edit.sav"
 
 #### select relevant variables, based on "Overzicht variabelen waves Wijkprofiel v2.xlsx"
 
-data2008sel <- data2008 %>% select(v1, v2, v3a, etni, v9, v12d, v13, v14a_1, v14a_2, v14a_3, v16, v17, v18a, v18b, v18c, v18d, v18e, v18f, v18g, v18h, v18i, v18j, v18k, v18l, v23b, v24a, v28, v29a, v33, v48a, v48b, v48c, v49, v55a, buurt, ijssel, GEWICHT_STAD, WAVEID)
+data2008sel <- data2008 %>% select(v1, v2, v3a, etni, v9, v12d, v13, v14a_1, v14a_2, v14a_3, v16, v17, v18a, v18b, v18c, v18d, v18e, v18f, v18g, v18h, v18i, v18j, v18k, v18l, v23b, v24a, v28, v29a, v33, v48a, v48b, v48c, v49, v55a, buurt, ijssel, GEWICHT_STAD, WAVEID, WAVE)
 
 ### recode and rename variables ###
 
@@ -187,6 +189,13 @@ data2008sel <- data2008sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethn
 
 data2008seldef <- subset(data2008sel, select = -c(buurt,ijssel,v55a,v28,v29a,v14a_1,v14a_2,v14a_3,v14a_1count,v14a_2count,v14a_3count))
 
+
+### adding contextual variables.
+
+Context2008 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2008.csv", sep = ";")
+data2008seldef <- inner_join(data2008seldef, Context2008)
+
+
 ```
 
 Data preparation 2009
@@ -197,7 +206,7 @@ Data preparation 2009
 data2009 <- read.spss("C:/Data Mattheus 2.0/Sociale Index enquete 2009 edit.sav", use.value.labels = FALSE, to.data.frame = TRUE)
 
 ##selection relevant variables
-data2009sel <- data2009 %>% select(v1, v2, v3a, etni, v9, v12d, v13, v14a_1, v14a_2, v14a_3, v16, v17, v18a, v18b, v18c, v18d, v18e, v18f, v18g, v18h, v18i, v18j, v18k, v18l, v23b, v24a, v28, v29a, v33, v48a, v48b, v48c, v49, v55a, buurt, ijssel, GEWICHT_STAD, WAVEID)
+data2009sel <- data2009 %>% select(v1, v2, v3a, etni, v9, v12d, v13, v14a_1, v14a_2, v14a_3, v16, v17, v18a, v18b, v18c, v18d, v18e, v18f, v18g, v18h, v18i, v18j, v18k, v18l, v23b, v24a, v28, v29a, v33, v48a, v48b, v48c, v49, v55a, buurt, ijssel, GEWICHT_STAD, WAVEID, WAVE)
 
 ##Gender
 data2009sel$v2[data2009sel$v2==2] <- 0
@@ -341,6 +350,11 @@ data2009sel <- data2009sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethn
 
 data2009seldef <- subset(data2009sel, select = -c(buurt,ijssel,v55a,v28,v29a,v14a_1,v14a_2,v14a_3,v14a_1count,v14a_2count,v14a_3count))
 
+### adding contextual variables.
+
+Context2009 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2009.csv", sep = ";")
+data2009seldef <- inner_join(data2009seldef, Context2009)
+
 ```
 
 Data preparation 2010
@@ -351,7 +365,7 @@ Data preparation 2010
 data2010 <- read.spss("C:/Data Mattheus 2.0/Sociale Index enquete 2010 edit.sav", use.value.labels = FALSE, to.data.frame = TRUE)
 
 ##selection relevant variables
-data2010sel <- data2010 %>% select(v1, v2, v3a, etni, v9, v12d, v13, v14a_1, v14a_2, v14a_3, v16, v17, v18a, v18b, v18c, v18d, v18e, v18f, v18g, v18h, v18i, v18j, v18k, v18l, v23b, v24a, v28, v29a, v33, v48a, v48b, v48c, v49, v55a, buurt, ijssel, GEWICHT_STAD, WAVEID)
+data2010sel <- data2010 %>% select(v1, v2, v3a, etni, v9, v12d, v13, v14a_1, v14a_2, v14a_3, v16, v17, v18a, v18b, v18c, v18d, v18e, v18f, v18g, v18h, v18i, v18j, v18k, v18l, v23b, v24a, v28, v29a, v33, v48a, v48b, v48c, v49, v55a, buurt, ijssel, GEWICHT_STAD, WAVEID, WAVE)
 
 ##Gender
 data2010sel$v2[data2010sel$v2==2] <- 0
@@ -491,6 +505,11 @@ data2010sel <- data2010sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethn
 
 data2010seldef <- subset(data2010sel, select = -c(buurt,ijssel,v55a,v28,v29a,v14a_1,v14a_2,v14a_3,v14a_1count,v14a_2count,v14a_3count))
 
+### adding contextual variables.
+
+Context2010 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2010.csv", sep = ";")
+data2010seldef <- inner_join(data2010seldef, Context2010)
+
 ```
 
 Data preparation 2011
@@ -503,7 +522,7 @@ Data preparation 2011
 data2011 <- read.spss("C:/Data Mattheus 2.0/Sociale Index enquete 2011 nieuwe versie edit.sav", use.value.labels = FALSE, to.data.frame = TRUE)
 
 ##select relevant variables
-data2011sel <- data2011 %>% select(v1, v2, v3a, st_etni, v10, v18, v19a_1, v19a_2, v19a_3, v42c,v42d, v22a, v22b, v22c, v22d, v22e, v22f, v22g, v22h, v22i, v22j, v22k, v22l, v27b, v28a, v34, v35a, v37, v51a, v51b, v51c, v53, v62a, gebcode, GEWICHT_STAD, WAVEID)
+data2011sel <- data2011 %>% select(v1, v2, v3a, st_etni, v10, v18, v19a_1, v19a_2, v19a_3, v42c,v42d, v22a, v22b, v22c, v22d, v22e, v22f, v22g, v22h, v22i, v22j, v22k, v22l, v27b, v28a, v34, v35a, v37, v51a, v51b, v51c, v53, v62a, gebcode, GEWICHT_STAD, WAVEID, WAVE)
 
 ##Gender
 data2011sel$v2[data2011sel$v2==2] <- 0
@@ -642,6 +661,12 @@ data2011sel <- data2011sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethn
 
 data2011seldef <- subset(data2011sel, select = -c(gebcode,v62a,v34,v35a,v19a_1,v19a_2,v19a_3,v19a_1count,v19a_2count,v19a_3count))
 
+### adding contextual variables.
+
+Context2011 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2011.csv", sep = ";")
+data2011seldef <- inner_join(data2011seldef, Context2011)
+
+
 ```
 
 Data preparation 2013
@@ -654,7 +679,7 @@ Data preparation 2013
 data2013 <- read.spss("C:/Data Mattheus 2.0/WO respons 2014 def (2013) edit.sav", use.value.labels = FALSE, to.data.frame = TRUE)
 
 ##select relevant variables
-data2013sel <- data2013 %>% select(v1, v2, v3a, st_etni, v8, v18, v19a_1, v19a_2, v19a_3, v52c, v52d, v26a, v26b, v26c, v26i, v22b, v22c, v22d, v26d, v26e, v27a, v26f, v22e, v39b, v40a, v43, v44a, v47, v73a, v73b, v73c, v61, v71a, gebcode, GEWICHT_STAD, WAVEID)
+data2013sel <- data2013 %>% select(v1, v2, v3a, st_etni, v8, v18, v19a_1, v19a_2, v19a_3, v52c, v52d, v26a, v26b, v26c, v26i, v22b, v22c, v22d, v26d, v26e, v27a, v26f, v22e, v39b, v40a, v43, v44a, v47, v73a, v73b, v73c, v61, v71a, gebcode, GEWICHT_STAD, WAVEID, WAVE)
 
 ##Gender
 data2013sel$v2[data2013sel$v2==2] <- 0
@@ -799,6 +824,10 @@ data2013sel <- data2013sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethn
 
 data2013seldef <- subset(data2013sel, select = -c(gebcode,v71a,v43,v44a,v19a_1,v19a_2,v19a_3,v19a_1count,v19a_2count,v19a_3count,unieknummer,Aantal_maanden_op_adres))
 
+### adding contextual variables.
+
+Context2013 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2013.csv", sep = ";")
+data2013seldef <- inner_join(data2013seldef, Context2013)
 ```
 
 Data preparation 2015
@@ -808,13 +837,11 @@ Data preparation 2015
 ##Adress_years => BRP!!
 ## not present: Neigh_joy_int
 
-
-
 ##load raw data 2015
 data2015 <- read.spss("C:/Data Mattheus 2.0/Sociale Index enquete 2016 nieuwe versie edit.sav", use.value.labels = FALSE, to.data.frame = TRUE)
 
 ##select relevant variables
-data2015sel <- data2015 %>% select(v1, v2, v3a, etniciteit_str, VN39, v18, v19_1, v19_2, v19_3,v19_4,v19_5, v52c,v52d, v26a, v26c, v26i, v22b, v22c, v22d, v26d, v26e, v27a, v26f, v22e, v39b, v40a, v43, v44a, v47, v73a, v73b, v73c, v61, v71a, Wijkprofielindeling, GEWICHT_STAD, WAVEID)
+data2015sel <- data2015 %>% select(v1, v2, v3a, etniciteit_str, VN39, v18, v19_1, v19_2, v19_3,v19_4,v19_5, v52c,v52d, v26a, v26c, v26i, v22b, v22c, v22d, v26d, v26e, v27a, v26f, v22e, v39b, v40a, v43, v44a, v47, v73a, v73b, v73c, v61, v71a, Wijkprofielindeling, GEWICHT_STAD, WAVEID, WAVE)
 
 ##Gender
 data2015sel$v2[data2015sel$v2==2] <- 0
@@ -963,6 +990,54 @@ data2015sel <- data2015sel %>% rename(Age = v1, Male = v2, Household = v3a, Ethn
 ##original variables that need to be dropped 
 data2015seldef <- subset(data2015sel, select = -c(v71a,v43,v44a,v19_1,v19_2,v19_3,v19_4,v19_5,v19_2count,v19_3count,Name, Codeuniektxt,Aantal_maanden_op_adres))
 
+### adding contextual variables.
+
+Context2015 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2015.csv", sep = ";")
+data2015seldef <- inner_join(data2015seldef, Context2015)
+
 ```
 
+Join all waves 2008,2009,2010,2011,2013,2015
 
+``` {r setup, include = FALSE}
+
+### Join wave by wave
+
+Full_20082009 <- full_join(data2008seldef, data2009seldef)
+Full_20082010 <- full_join(Full_20082009, data2010seldef)
+Full_20082011 <- full_join(Full_20082010, data2011seldef)
+Full_20082013 <- full_join(Full_20082011, data2013seldef)                                  
+Full_20082015 <- full_join(Full_20082013, data2015seldef)
+
+### some tests with summarising and plotting data
+
+rm(Full_20082015a)
+
+?as.numeric
+
+Full_20082015a <- Full_20082015
+Full_20082015a$Neigh_involve <- as.numeric(Full_20082015$Neigh_involve) - 1
+table(Full_20082015a$Neigh_involve)
+summary(Full_20082015a$Neigh_involve)
+describe(Full_20082015a$Neigh_involve)
+
+Full_20082015a <- Full_20082015a %>% group_by(Wijk71,WAVE) %>% mutate(Neigh_inv_mean_unw = mean(Neigh_involve, na.rm=TRUE))
+
+?mutate
+
+table(Full_20082015a$Neigh_inv_mean_unw)
+describe(Full_20082015a$Neigh_inv_mean_unw)
+summary(Full_20082015a$Neigh_inv_mean_unw)
+
+ggplot(Full_20082015a, aes(x = WAVE, y = Neigh_inv_mean_unw)) + geom_point()
+
+ggplot(Full_20082015a, aes(x = factor(WAVE), y = Neigh_inv_mean_unw)) + geom_boxplot()
+
+ggplot(Full_20082015a, aes(x = factor(WAVE), y = Neigh_inv_mean_unw, colour = Low_40)) + geom_point()
+
+g <- ggplot(Full_20082015a, aes(x = factor(WAVE), y = Neigh_inv_mean_unw)) 
+
+g1 <- ggplot(Full_20082015a, aes(x = factor(WAVE), y = Neigh_inv_mean_unw, colour= Low_40)) 
+
+
+g1 + geom_point() +facet_wrap(~Wijk71)
