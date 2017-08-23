@@ -14,6 +14,10 @@ library(Hmisc)
 library(tidyverse)
 library(foreign)
 library(car)
+library(weights)
+library(reshape2)
+library(Matrix)
+library(lme4)
 
 ##list variables: Age, Gender, Household, Ethnicity, Tenure, Adress_years,Neigh_responsibility, Neighb_involve, Contact_neighbours, Contact_othernei, Neigh_familiarity, Neigh_joy_int, Neigh_cosy, Neigh_feelhome, Neigh_notnice, Neigh_move, Neigh_lucky, Neigh_treat, Neigh_attitudes, Neigh_youngold, Neigh_problemsother, Neigh_problem, Municipality_support, Neigh_attachment, Labour_status, Volunteering, Dutch_read, Dutch_speak, Dutch_write, Health, Education, Neighbourhood, Wijk71,	Low_40, Disposable_income,	Perc_unemployed,	Perc_benefits,	Herf_div
 
@@ -192,7 +196,10 @@ data2008seldef <- subset(data2008sel, select = -c(buurt,ijssel,v55a,v28,v29a,v14
 
 ### adding contextual variables.
 
-Context2008 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2008.csv", sep = ";")
+## missing values: 1[Low_40], 4[Perc_unemployed,Perc_benefits, Herf_div]
+# replaced by 1[Low40(2009)], 4[Perc_unemployed(2011),Perc_benefits(2013), Herf_div(2011)]
+
+Context2008 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2008 - Adj.csv", sep = ";")
 data2008seldef <- inner_join(data2008seldef, Context2008)
 
 
@@ -352,7 +359,10 @@ data2009seldef <- subset(data2009sel, select = -c(buurt,ijssel,v55a,v28,v29a,v14
 
 ### adding contextual variables.
 
-Context2009 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2009.csv", sep = ";")
+## missing values: 3005[Low_40,Disposable_income], 4[Perc_unemployed,Perc_benefits, Herf_div]
+# replaced by 3005[Low_40(2010),Disposable_income(2010)], 4[Perc_unemployed(2011),Perc_benefits(2013), Herf_div(2011)]
+
+Context2009 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2009 - Adj.csv", sep = ";")
 data2009seldef <- inner_join(data2009seldef, Context2009)
 
 ```
@@ -507,7 +517,10 @@ data2010seldef <- subset(data2010sel, select = -c(buurt,ijssel,v55a,v28,v29a,v14
 
 ### adding contextual variables.
 
-Context2010 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2010.csv", sep = ";")
+## missing values:4[Perc_unemployed,Perc_benefits, Herf_div]
+# replaced by 4[Perc_unemployed(2011),Perc_benefits(2013), Herf_div(2011)]
+
+Context2010 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2010 - Adj.csv", sep = ";")
 data2010seldef <- inner_join(data2010seldef, Context2010)
 
 ```
@@ -663,8 +676,13 @@ data2011seldef <- subset(data2011sel, select = -c(gebcode,v62a,v34,v35a,v19a_1,v
 
 ### adding contextual variables.
 
-Context2011 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2011.csv", sep = ";")
+## missing values:4[Perc_benefits]
+# replaced by 4[Perc_benefits(2013)]
+
+Context2011 <- read.csv("C:/Data Mattheus 2.0/Buurtdata context 2011 - Adj.csv", sep = ";")
 data2011seldef <- inner_join(data2011seldef, Context2011)
+
+
 
 
 ```
@@ -998,6 +1016,7 @@ data2015seldef <- inner_join(data2015seldef, Context2015)
 ```
 
 Join all waves 2008,2009,2010,2011,2013,2015
++ Analysis
 
 ``` {r setup, include = FALSE}
 
@@ -1009,35 +1028,247 @@ Full_20082011 <- full_join(Full_20082010, data2011seldef)
 Full_20082013 <- full_join(Full_20082011, data2013seldef)                                  
 Full_20082015 <- full_join(Full_20082013, data2015seldef)
 
+
+############ Analysis ######################
+
+## weight data and save scores for Figure 1 (trend figure)
+
+#Neighbourhood involvement
+prop.table(table(data2008seldef$Neigh_involve))
+wpct(data2008seldef$Neigh_involve, data2008seldef$GEWICHT_STAD)
+
+prop.table(table(data2009seldef$Neigh_involve))
+wpct(data2009seldef$Neigh_involve, data2009seldef$GEWICHT_STAD)
+
+prop.table(table(data2010seldef$Neigh_involve))
+wpct(data2010seldef$Neigh_involve, data2010seldef$GEWICHT_STAD)
+
+prop.table(table(data2011seldef$Neigh_involve))
+wpct(data2011seldef$Neigh_involve, data2011seldef$GEWICHT_STAD)
+
+prop.table(table(data2013seldef$Neigh_involve))
+wpct(data2013seldef$Neigh_involve, data2013seldef$GEWICHT_STAD)
+
+prop.table(table(data2015seldef$Neigh_involve))
+wpct(data2015seldef$Neigh_involve, data2015seldef$GEWICHT_STAD)
+
+Full_20082015$Perc_N_inv <- NA
+Full_20082015$Perc_N_inv[Full_20082015$WAVE==2008] <- 0.2357796
+Full_20082015$Perc_N_inv[Full_20082015$WAVE==2009] <- 0.2326045
+Full_20082015$Perc_N_inv[Full_20082015$WAVE==2010] <- 0.2304046
+Full_20082015$Perc_N_inv[Full_20082015$WAVE==2011] <- 0.2337748 
+Full_20082015$Perc_N_inv[Full_20082015$WAVE==2013] <- 0.2339587
+Full_20082015$Perc_N_inv[Full_20082015$WAVE==2015] <- 0.2749579
+
+Full_20082015$Perc_N_inv_w <- NA
+Full_20082015$Perc_N_inv_w[Full_20082015$WAVE==2008] <- 0.2266144
+Full_20082015$Perc_N_inv_w[Full_20082015$WAVE==2009] <- 0.2262049
+Full_20082015$Perc_N_inv_w[Full_20082015$WAVE==2010] <- 0.2183327
+Full_20082015$Perc_N_inv_w[Full_20082015$WAVE==2011] <- 0.2194426 
+Full_20082015$Perc_N_inv_w[Full_20082015$WAVE==2013] <- 0.2164532
+Full_20082015$Perc_N_inv_w[Full_20082015$WAVE==2015] <- 0.2550027
+
+#Volunteering
+prop.table(table(data2008seldef$Volunteering))
+wpct(data2008seldef$Volunteering, data2008seldef$GEWICHT_STAD)
+
+prop.table(table(data2009seldef$Volunteering))
+wpct(data2009seldef$Volunteering, data2009seldef$GEWICHT_STAD)
+
+prop.table(table(data2010seldef$Volunteering))
+wpct(data2010seldef$Volunteering, data2010seldef$GEWICHT_STAD)
+
+prop.table(table(data2011seldef$Volunteering))
+wpct(data2011seldef$Volunteering, data2011seldef$GEWICHT_STAD)
+
+prop.table(table(data2013seldef$Volunteering))
+wpct(data2013seldef$Volunteering, data2013seldef$GEWICHT_STAD)
+
+prop.table(table(data2015seldef$Volunteering))
+wpct(data2015seldef$Volunteering, data2015seldef$GEWICHT_STAD)
+
+Full_20082015$Perc_Volunteer <- NA
+Full_20082015$Perc_Volunteer[Full_20082015$WAVE==2008] <- 0.2304545 
+Full_20082015$Perc_Volunteer[Full_20082015$WAVE==2009] <- 0.2379408
+Full_20082015$Perc_Volunteer[Full_20082015$WAVE==2010] <- 0.2326607
+Full_20082015$Perc_Volunteer[Full_20082015$WAVE==2011] <- 0.2178457 
+Full_20082015$Perc_Volunteer[Full_20082015$WAVE==2013] <- 0.2213054
+Full_20082015$Perc_Volunteer[Full_20082015$WAVE==2015] <- 0.2462245
+
+Full_20082015$Perc_Volunteer_w <- NA
+Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2008] <- 0.219716 
+Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2009] <- 0.2279223
+Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2010] <- 0.2266389
+Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2011] <- 0.2118029 
+Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2013] <- 0.2132327
+Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2015] <- 0.2346285
+
+## Chi-square tests
+
+Chitest_N_inv <- table(Full_20082015$WAVE, Full_20082015$Neigh_involve)
+chisq.test(Chitest_N_inv)
+
+Chitest_Volunteer <- table(Full_20082015$WAVE, Full_20082015$Volunteering)
+chisq.test(Chitest_Volunteer)
+
+### plotting trend in neighbourhood involvement and volunteering
+
+## weighted plot
+
+#Fig1_w <- ggplot(Full_20082015, aes(x=factor(WAVE))) + geom_line(aes(y=Perc_N_inv_w,group=1,color="Neighbourhood involvement")) + geom_line(aes(y=Perc_Volunteer_w, group=1,color="Volunteering")) + geom_point(aes(y=Perc_N_inv_w,color="Neighbourhood involvement")) +geom_point(aes(y=Perc_Volunteer_w,color="Volunteering"))  + expand_limits(y=c(0.15,0.3))
+
+
+Full_20082015.long <- melt(Full_20082015, id = "WAVE", measure = c("Perc_N_inv_w","Perc_Volunteer_w"))
+Fig1_w2 <- ggplot(Full_20082015.long, aes(WAVE, value, colour=variable, shape=variable))
+Fig1_w2 + geom_line() + expand_limits(y=c(0.15,0.3)) + geom_point()
+
+## unweighted plot
+
+#Full_20082015.long2 <- melt(Full_20082015, id = "WAVE", measure = c("Perc_N_inv","Perc_Volunteer"))
+#Fig1 <- ggplot(Full_20082015.long2, aes(WAVE, value, colour=variable, shape=variable))
+#Fig1 + geom_line() + expand_limits(y=c(0.15,0.3)) + geom_point()
+
+## factor analysis neighbourhood SES + save scores
+
+fa <- factanal(~Low_40+Disposable_income+Perc_unemployed+Perc_benefits, factors = 1, data = Full_20082015, scores = "regression")
+
+Full_20082015 <- cbind(Full_20082015, fa$scores)
+Full_20082015$Neigh_SES <- 0 - Full_20082015$Factor1
+
+
+##############################
+#### regression analyses #####
+
+##List variables to be used: Age, Gender, Household, Ethnicity, Tenure, Adress_years
+
+## Nullmodels, compare fit
+# Neigh_involve
+
+Model0 <- glm(Neigh_involve ~ 1, data = Full_20082015,family = binomial(link="logit"))
+summary(Model0)
+
+Model0A <- glmer(Neigh_involve ~ (1|Neigh_SES), data = Full_20082015,family = binomial(link="logit"))
+summary(Model0A)
+
+Model0B <- glmer(Neigh_involve ~ (1|Wijk71), data = Full_20082015,family = binomial(link="logit"))
+summary(Model0B)
+
+Model0C <- glmer(Neigh_involve ~ (1|WAVE)+ (1|Neigh_SES) , data = Full_20082015,family = binomial(link="logit"))
+summary(Model0C)
+
+Model0D <- glmer(Neigh_involve ~ (1|Wijk71)+ (1|Neigh_SES) , data = Full_20082015,family = binomial(link="logit"))
+summary(Model0D)
+
+Model0E <- glmer(Neigh_involve ~ (1|Wijk71)+ (1|WAVE) , data = Full_20082015,family = binomial(link="logit"))
+summary(Model0E)
+
+Model0F <- glmer(Neigh_involve ~ (1|Neigh_SES) + (1|Wijk71)+ (1|WAVE) , data = Full_20082015,family = binomial(link="logit"))
+summary(Model0F)
+
 ### some tests with summarising and plotting data
-
-rm(Full_20082015a)
-
-?as.numeric
 
 Full_20082015a <- Full_20082015
 Full_20082015a$Neigh_involve <- as.numeric(Full_20082015$Neigh_involve) - 1
-table(Full_20082015a$Neigh_involve)
-summary(Full_20082015a$Neigh_involve)
+#table(Full_20082015a$Neigh_involve)
+#describe(Full_20082015a$Neigh_involve)
+
+Full_20082015a <- Full_20082015a %>% group_by(WAVE,Wijk71) %>% mutate(Neigh_inv_mean_unw = mean(Neigh_involve, na.rm=TRUE))
+
+describe(Full_20082015a$disp_inc_10)
+
+?sapply
+
+#table(Full_20082015a$Neigh_inv_mean_unw)
+
 describe(Full_20082015a$Neigh_involve)
-
-Full_20082015a <- Full_20082015a %>% group_by(Wijk71,WAVE) %>% mutate(Neigh_inv_mean_unw = mean(Neigh_involve, na.rm=TRUE))
-
-?mutate
-
-table(Full_20082015a$Neigh_inv_mean_unw)
-describe(Full_20082015a$Neigh_inv_mean_unw)
-summary(Full_20082015a$Neigh_inv_mean_unw)
-
-ggplot(Full_20082015a, aes(x = WAVE, y = Neigh_inv_mean_unw)) + geom_point()
-
-ggplot(Full_20082015a, aes(x = factor(WAVE), y = Neigh_inv_mean_unw)) + geom_boxplot()
-
-ggplot(Full_20082015a, aes(x = factor(WAVE), y = Neigh_inv_mean_unw, colour = Low_40)) + geom_point()
 
 g <- ggplot(Full_20082015a, aes(x = factor(WAVE), y = Neigh_inv_mean_unw)) 
 
 g1 <- ggplot(Full_20082015a, aes(x = factor(WAVE), y = Neigh_inv_mean_unw, colour= Low_40)) 
 
+g + geom_boxplot()
 
-g1 + geom_point() +facet_wrap(~Wijk71)
+g1 + geom_point() + facet_wrap(~Wijk71)
+
+Full_20082015a <- Full_20082015a %>% group_by(WAVE) %>% mutate(Neigh_inv_mean_wave = mean(Neigh_involve, na.rm=TRUE))
+
+ga <- ggplot(Full_20082015a, aes(x = factor(WAVE), y = Neigh_inv_mean_wave))
+
+gb <- ggplot(Full_20082015a, aes(x=factor(WAVE), y=Neigh_involve, group=1)) 
+
+ga + geom_point()+ geom_line()
+
+gb + stat_summary(fun.y=mean, geom="line") + expand_limits(y=c(0.2,0.3))
+
+?stat_summary
+
+## neigh disposable income
+
+
+Full_20082015a <- Full_20082015a %>% group_by(WAVE) %>% mutate(disp_inc_10 = ntile(Disposable_income, 10))
+
+Full_20082015a <- Full_20082015a %>% group_by(WAVE, disp_inc_10) %>% mutate(Neigh_inv_DI10 = mean(Neigh_involve, na.rm=TRUE)) 
+
+Full_20082015a <- Full_20082015a %>% group_by(WAVE) %>% mutate(disp_inc_5 = ntile(Disposable_income, 5))
+
+Full_20082015a <- Full_20082015a %>% group_by(WAVE, disp_inc_5) %>% mutate(Neigh_inv_DI5 = mean(Neigh_involve, na.rm=TRUE)) 
+               
+
+g2 <- ggplot(Full_20082015a, aes(x = WAVE, y = Neigh_inv_DI10, colour = factor(disp_inc_10)))
+
+g2 + geom_point() + geom_line()
+
+g3 <- ggplot(Full_20082015a, aes(x = WAVE, y = Neigh_inv_DI5, colour = factor(disp_inc_5)))
+
+g3 + geom_point() + geom_line()
+
+?geom_line
+
+
+## education groups
+
+Full_20082015a <- Full_20082015a %>% group_by(WAVE,Educ_ordinal) %>% mutate(Neigh_inv_educ = mean(Neigh_involve, na.rm=TRUE))
+
+#table(Full_20082015a$Educ_ordinal, exclude = NULL)
+
+#describe(Full_20082015a$Neigh_inv_educ)
+
+g4 <- ggplot(Full_20082015a, aes(x = WAVE, y = Neigh_inv_educ, colour = Educ_ordinal))
+
+g4+ geom_point() + geom_line()
+
+### labour status
+
+table(Full_20082015a$Labour_status, exclude = NULL)
+
+Full_20082015a <- Full_20082015a %>% group_by(WAVE,Labour_status) %>% mutate(Neigh_inv_LS = mean(Neigh_involve, na.rm=TRUE))
+
+describe(Full_20082015a$Neigh_inv_LS)
+
+g5 <- ggplot(Full_20082015a, aes(x = WAVE, y = Neigh_inv_LS, colour = Labour_status))
+
+g5 + geom_point() + geom_line()
+
+###
+
+describe(Full_20082015$GEWICHT_STAD)
+
+Full_20082015a$Neigh_involve_w <- xtabs(GEWICHT_STAD ~ Neigh_involve, data = Full_20082015a)
+
+wpct(Full_20082015a$Neigh_involve)
+wpct(Full_20082015a$Neigh_involve, Full_20082015a$GEWICHT_STAD)
+
+Full_20082015a$Neigh_involve_w <- (Full_20082015a$Neigh_involve*Full_20082015a$GEWICHT_STAD)/Full_20082015a$GEWICHT_STAD
+
+table(Full_20082015a$Neigh_involve)
+
+wpct(Full_20082015a$Neigh_involve_w)
+
+?wpct
+?table
+?prop.table
+?factanal
+
+```
+
+
