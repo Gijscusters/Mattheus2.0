@@ -18,8 +18,10 @@ library(weights)
 library(reshape2)
 library(Matrix)
 library(lme4)
+library(influence.ME)
+library(rockchalk)
 
-##list variables: Age, Gender, Household, Ethnicity, Tenure, Adress_years,Neigh_responsibility, Neighb_involve, Contact_neighbours, Contact_othernei, Neigh_familiarity, Neigh_joy_int, Neigh_cosy, Neigh_feelhome, Neigh_notnice, Neigh_move, Neigh_lucky, Neigh_treat, Neigh_attitudes, Neigh_youngold, Neigh_problemsother, Neigh_problem, Municipality_support, Neigh_attachment, Labour_status, Volunteering, Dutch_read, Dutch_speak, Dutch_write, Health, Education, Neighbourhood, Wijk71,	Low_40, Disposable_income,	Perc_unemployed,	Perc_benefits,	Herf_div
+##list variables: Age, Gender, Household, Ethnicity, Tenure, Adress_years,Neigh_responsibility, Neighb_involve, Contact_neighbours, Contact_othernei, Neigh_familiarity, Neigh_joy_int, Neigh_cosy, Neigh_feelhome, Neigh_notnice, Neigh_move, Neigh_lucky, Neigh_treat, Neigh_attitudes, Neigh_youngold, Neigh_problemsother, Neigh_problem, Municipality_support, Neigh_attachment, Labour_status, Volunteering, Dutch_read, Dutch_speak, Dutch_write, Health, Education,  Wijk71,	Low_40, Disposable_income,	Perc_unemployed,	Perc_benefits,	Herf_div, Turnover
 
 
 ```
@@ -56,8 +58,8 @@ etni_labels <- c("Dutch", "Turkish", "Moroccan","Antillean", "Surinamese", "Cape
 data2008sel$etni <- factor(data2008sel$etni, labels = etni_labels, ordered = FALSE)
 
 ##Tenure
-data2008sel$v9 <-recode(data2008sel$v9, "3=NA;2=1;1=0")
-v9_labels <- c("Rent", "Owner")
+data2008sel$v9 <-recode(data2008sel$v9, "3=99;2=1;1=0;NA=99")
+v9_labels <- c("Rent", "Owner","Missing")
 data2008sel$v9 <- factor(data2008sel$v9, labels = v9_labels, ordered = FALSE)
 
 ##Neigh_responsibility
@@ -149,9 +151,10 @@ data2008sel$Labour_status[data2008sel$v29a==1] <- 3
 data2008sel$Labour_status[data2008sel$v29a==2] <- 4
 data2008sel$Labour_status[data2008sel$v29a==4] <- 5
 data2008sel$Labour_status[data2008sel$v29a==7 | data2008sel$v29a==8] <- 6
-data2008sel$Labour_status[data2008sel$v29a==6] <- NA
+data2008sel$Labour_status[data2008sel$v29a==6] <- 99
+data2008sel$Labour_status[is.na(data2008sel$Labour_status)] <- 99 
 
-Labour_labels <- c("Works>12h","Unemployed/incapacitated","Student","Household","Retired", "Volunteer/Other")
+Labour_labels <- c("Works>12h","Unemployed/incapacitated","Student","Household","Retired", "Volunteer/Other","Missing")
 data2008sel$Labour_status <- factor(data2008sel$Labour_status, labels = Labour_labels, ordered = FALSE) 
 
 ##Volunteering
@@ -170,10 +173,10 @@ data2008sel$Educ_interval <- data2008sel$v55a
 data2008sel$Educ_interval[data2008sel$v55a==10] <- NA 
 data2008sel$Educ_interval <- recode(data2008sel$Educ_interval,"3:4=3;5=4;6=5;7=6;8=7")
 
-data2008sel$Educ_ordinal <- recode(data2008sel$Educ_interval,"0:1=0;2:3=1;4:5=2;6:7=3")
+data2008sel$Educ_ordinal <- recode(data2008sel$Educ_interval,"0:1=0;2:3=1;4:5=2;6:7=3;NA=99")
 
-Educ_labels <- c("Low","Low-med","Medium","High")
-data2008sel$Educ_ordinal <- factor(data2008sel$Educ_ordinal, labels = Educ_labels, ordered = TRUE)
+Educ_labels <- c("Low","Low-med","Medium","High", "Missing")
+data2008sel$Educ_ordinal <- factor(data2008sel$Educ_ordinal, labels = Educ_labels, ordered = FALSE)
 
 ## Neighbourhood (excl. Rozenburg[4]/Kop van Zuid[17])
 
@@ -227,7 +230,7 @@ data2009sel$v3a <- factor(data2009sel$v3a, labels = v3a_labels, ordered = FALSE)
 data2009sel$etni <- factor(data2009sel$etni, labels = etni_labels, ordered = FALSE)
 
 ##Tenure
-data2009sel$v9 <-recode(data2009sel$v9, "3=NA;2=1;1=0")
+data2009sel$v9 <-recode(data2009sel$v9, "3=99;2=1;1=0;NA=99")
 data2009sel$v9 <- factor(data2009sel$v9, labels = v9_labels, ordered = FALSE)
 
 ##Neigh_responsibility
@@ -316,9 +319,12 @@ data2009sel$Labour_status[data2009sel$v29a==1] <- 3
 data2009sel$Labour_status[data2009sel$v29a==2] <- 4
 data2009sel$Labour_status[data2009sel$v29a==4] <- 5
 data2009sel$Labour_status[data2009sel$v29a==7 | data2009sel$v29a==8] <- 6
-data2009sel$Labour_status[data2009sel$v29a==6] <- NA
+data2009sel$Labour_status[data2009sel$v29a==6] <- 99
+data2009sel$Labour_status[is.na(data2009sel$Labour_status)] <- 99 
 
 data2009sel$Labour_status <- factor(data2009sel$Labour_status, labels = Labour_labels, ordered = FALSE) 
+
+table(data2008sel$Labour_status, exclude = NULL)
 
 ##Volunteering
 data2009sel$v33[data2009sel$v33==2] <- 0
@@ -336,8 +342,8 @@ data2009sel$Educ_interval <- data2009sel$v55a
 data2009sel$Educ_interval[data2009sel$v55a==10] <- NA 
 data2009sel$Educ_interval <- recode(data2009sel$Educ_interval,"3:4=3;5=4;6=5;7=6;8=7")
 
-data2009sel$Educ_ordinal <- recode(data2009sel$Educ_interval,"0:1=0;2:3=1;4:5=2;6:7=3")
-data2009sel$Educ_ordinal <- factor(data2009sel$Educ_ordinal, labels = Educ_labels, ordered = TRUE)
+data2009sel$Educ_ordinal <- recode(data2009sel$Educ_interval,"0:1=0;2:3=1;4:5=2;6:7=3;NA=99")
+data2009sel$Educ_ordinal <- factor(data2009sel$Educ_ordinal, labels = Educ_labels, ordered = FALSE)
 
 ## Neighbourhood:Wijk71 (excl. Rozenburg[4])
 
@@ -389,7 +395,7 @@ data2010sel$v3a <- factor(data2010sel$v3a, labels = v3a_labels, ordered = FALSE)
 data2010sel$etni <- factor(data2010sel$etni, labels = etni_labels, ordered = FALSE)
 
 ##Tenure
-data2010sel$v9 <-recode(data2010sel$v9, "3=NA;2=1;1=0")
+data2010sel$v9 <-recode(data2010sel$v9, "3=99;2=1;1=0;NA=99")
 data2010sel$v9 <- factor(data2010sel$v9, labels = v9_labels, ordered = FALSE)
 
 ##Neigh_responsibility
@@ -476,7 +482,8 @@ data2010sel$Labour_status[data2010sel$v29a==1] <- 3
 data2010sel$Labour_status[data2010sel$v29a==2] <- 4
 data2010sel$Labour_status[data2010sel$v29a==4] <- 5
 data2010sel$Labour_status[data2010sel$v29a==7 | data2010sel$v29a==8] <- 6
-data2010sel$Labour_status[data2010sel$v29a==6] <- NA
+data2010sel$Labour_status[data2010sel$v29a==6] <- 99
+data2010sel$Labour_status[is.na(data2010sel$Labour_status)] <- 99 
 
 data2010sel$Labour_status <- factor(data2010sel$Labour_status, labels = Labour_labels, ordered = FALSE) 
 
@@ -496,8 +503,8 @@ data2010sel$Educ_interval <- data2010sel$v55a
 data2010sel$Educ_interval[data2010sel$v55a==10] <- NA 
 data2010sel$Educ_interval <- recode(data2010sel$Educ_interval,"3:4=3;5=4;6=5;7=6;8=7")
 
-data2010sel$Educ_ordinal <- recode(data2010sel$Educ_interval,"0:1=0;2:3=1;4:5=2;6:7=3")
-data2010sel$Educ_ordinal <- factor(data2010sel$Educ_ordinal, labels = Educ_labels, ordered = TRUE)
+data2010sel$Educ_ordinal <- recode(data2010sel$Educ_interval,"0:1=0;2:3=1;4:5=2;6:7=3;NA=99")
+data2010sel$Educ_ordinal <- factor(data2010sel$Educ_ordinal, labels = Educ_labels, ordered = FALSE)
 
 ## Neighbourhood:Wijk71 (excl. Rozenburg[4 of 0?]). Check ijssel==2 in SPSS-file
 data2010sel$Wijk71 <- data2010sel$buurt
@@ -550,7 +557,7 @@ data2011sel$st_etni <- recode(data2011sel$st_etni, "7=1;4=2;5=3;2=4;1=5;3=6;6=7;
 data2011sel$st_etni <- factor(data2011sel$st_etni, labels = etni_labels, ordered = FALSE)
 
 ##Tenure
-data2011sel$v10 <-recode(data2011sel$v10, "3=NA;2=0")
+data2011sel$v10 <-recode(data2011sel$v10, "3=99;2=0;NA=99")
 data2011sel$v10 <- factor(data2011sel$v10, labels = v9_labels, ordered = FALSE)
 
 ##Neigh_responsibility
@@ -639,7 +646,8 @@ data2011sel$Labour_status[data2011sel$v35a==1] <- 3
 data2011sel$Labour_status[data2011sel$v35a==2] <- 4
 data2011sel$Labour_status[data2011sel$v35a==4] <- 5
 data2011sel$Labour_status[data2011sel$v35a==7 | data2011sel$v35a==8] <- 6
-data2011sel$Labour_status[data2011sel$v35a==6] <- NA
+data2011sel$Labour_status[data2011sel$v35a==6] <- 99
+data2011sel$Labour_status[is.na(data2011sel$Labour_status)] <- 99 
 
 data2011sel$Labour_status <- factor(data2011sel$Labour_status, labels = Labour_labels, ordered = FALSE) 
 
@@ -659,8 +667,8 @@ data2011sel$Educ_interval <- data2011sel$v62a
 data2011sel$Educ_interval[data2011sel$v62a==14 | data2011sel$v62a==13] <- NA 
 data2011sel$Educ_interval <- recode(data2011sel$Educ_interval,"1=0;2=1;3=2;4:5=3;9:10=4;6:8=5;11=6;12=7")
 
-data2011sel$Educ_ordinal <- recode(data2011sel$Educ_interval,"0:1=0;2:3=1;4:5=2;6:7=3")
-data2011sel$Educ_ordinal <- factor(data2011sel$Educ_ordinal, labels = Educ_labels, ordered = TRUE)
+data2011sel$Educ_ordinal <- recode(data2011sel$Educ_interval,"0:1=0;2:3=1;4:5=2;6:7=3;NA=99")
+data2011sel$Educ_ordinal <- factor(data2011sel$Educ_ordinal, labels = Educ_labels, ordered = FALSE)
 
 ## Neighbourhood:Wijk71 
 
@@ -712,7 +720,7 @@ data2013sel$st_etni <- recode(data2013sel$st_etni, "7=1;4=2;5=3;2=4;1=5;3=6;6=7;
 data2013sel$st_etni <- factor(data2013sel$st_etni, labels = etni_labels, ordered = FALSE)
 
 ##Tenure
-data2013sel$v8 <-recode(data2013sel$v8, "3=NA;2=0")
+data2013sel$v8 <-recode(data2013sel$v8, "3=99;2=0;NA=99")
 data2013sel$v8 <- factor(data2013sel$v8, labels = v9_labels, ordered = FALSE)
 
 ##Neigh_responsibility
@@ -801,7 +809,8 @@ data2013sel$Labour_status[data2013sel$v44a==6] <- 3
 data2013sel$Labour_status[data2013sel$v44a==5] <- 4
 data2013sel$Labour_status[data2013sel$v44a==1] <- 5
 data2013sel$Labour_status[data2013sel$v44a==11 | data2013sel$v44a==12] <- 6
-data2013sel$Labour_status[data2013sel$v44a==8] <- NA
+data2013sel$Labour_status[data2013sel$v44a==8] <- 99
+data2013sel$Labour_status[is.na(data2013sel$Labour_status)] <- 99 
 
 data2013sel$Labour_status <- factor(data2013sel$Labour_status, labels = Labour_labels, ordered = FALSE) 
 
@@ -821,8 +830,8 @@ data2013sel$Educ_interval <- data2013sel$v71a
 data2013sel$Educ_interval[data2013sel$Educ_interval==12]<- NA 
 data2013sel$Educ_interval <- recode(data2013sel$Educ_interval,"1=0;2=1;3=2;4=3;6=3;5=4;7:8=5;9=6;10=7")
 
-data2013sel$Educ_ordinal <- recode(data2013sel$Educ_interval,"0:1=0;2:3=1;4:5=2;6:7=3")
-data2013sel$Educ_ordinal <- factor(data2013sel$Educ_ordinal, labels = Educ_labels, ordered = TRUE)
+data2013sel$Educ_ordinal <- recode(data2013sel$Educ_interval,"0:1=0;2:3=1;4:5=2;6:7=3;NA=99")
+data2013sel$Educ_ordinal <- factor(data2013sel$Educ_ordinal, labels = Educ_labels, ordered = FALSE)
 
 ## Neighbourhood:Wijk71 
 
@@ -873,7 +882,7 @@ data2015sel$etniciteit_str <- recode(as.numeric(data2015sel$etniciteit_str), "1=
 data2015sel$etniciteit_str <- factor(data2015sel$etniciteit_str, labels = etni_labels, ordered = FALSE)
 
 ##Tenure
-data2015sel$VN39 <-recode(data2015sel$VN39, "1:7=0;9=1;99=NA")
+data2015sel$VN39 <-recode(data2015sel$VN39, "1:7=0;9=1;NA=99")
 data2015sel$VN39 <- factor(data2015sel$VN39, labels = v9_labels, ordered = FALSE)
 
 ##Neigh_responsibility
@@ -968,9 +977,12 @@ data2015sel$Labour_status[data2015sel$v44a==6] <- 3
 data2015sel$Labour_status[data2015sel$v44a==5] <- 4
 data2015sel$Labour_status[data2015sel$v44a==1] <- 5
 data2015sel$Labour_status[data2015sel$v44a==7] <- 6
-data2015sel$Labour_status[data2015sel$v44a==8] <- NA
+data2015sel$Labour_status[data2015sel$v44a==8] <- 99
+data2015sel$Labour_status[is.na(data2015sel$Labour_status)] <- 99 
 
 data2015sel$Labour_status <- factor(data2015sel$Labour_status, labels = Labour_labels, ordered = FALSE) 
+
+
 
 ##Volunteering
 data2015sel$v47[data2015sel$v47==2] <- 0
@@ -988,8 +1000,8 @@ data2015sel$Educ_interval <- data2015sel$v71a
 data2015sel$Educ_interval[data2015sel$Educ_interval==12|data2015sel$Educ_interval==11]<- NA 
 data2015sel$Educ_interval <- recode(data2015sel$Educ_interval,"1=0;2=1;3=2;4=3;6=3;5=4;7:8=5;9=6;10=7")
 
-data2015sel$Educ_ordinal <- recode(data2015sel$Educ_interval,"0:1=0;2:3=1;4:5=2;6:7=3")
-data2015sel$Educ_ordinal <- factor(data2015sel$Educ_ordinal, labels = Educ_labels, ordered = TRUE)
+data2015sel$Educ_ordinal <- recode(data2015sel$Educ_interval,"0:1=0;2:3=1;4:5=2;6:7=3;NA=99")
+data2015sel$Educ_ordinal <- factor(data2015sel$Educ_ordinal, labels = Educ_labels, ordered = FALSE)
 
 ## Neighbourhood:Wijk71 
 data2015sel <- data2015sel %>% separate(Wijkprofielindeling,c("Wijk71","Name"), sep = ". ")
@@ -1103,13 +1115,20 @@ Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2011] <- 0.2118029
 Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2013] <- 0.2132327
 Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2015] <- 0.2346285
 
-## Chi-square tests
+## Chi-square tests (with/without 2015)
 
-Chitest_N_inv <- table(Full_20082015$WAVE, Full_20082015$Neigh_involve)
+Chitest_N_inv <- table(Full_20082013$WAVE, Full_20082013$Neigh_involve)
 chisq.test(Chitest_N_inv)
 
-Chitest_Volunteer <- table(Full_20082015$WAVE, Full_20082015$Volunteering)
+Chitest_Volunteer <- table(Full_20082013$WAVE, Full_20082013$Volunteering)
 chisq.test(Chitest_Volunteer)
+
+
+Chitest_N_inv1 <- table(Full_20082015$WAVE, Full_20082015$Neigh_involve)
+chisq.test(Chitest_N_inv1)
+
+Chitest_Volunteer1 <- table(Full_20082015$WAVE, Full_20082015$Volunteering)
+chisq.test(Chitest_Volunteer1)
 
 ### plotting trend in neighbourhood involvement and volunteering
 
@@ -1135,35 +1154,200 @@ fa <- factanal(~Low_40+Disposable_income+Perc_unemployed+Perc_benefits, factors 
 Full_20082015 <- cbind(Full_20082015, fa$scores)
 Full_20082015$Neigh_SES <- 0 - Full_20082015$Factor1
 
+describe(Full_20082015$Neigh_SES)
 
-##############################
-#### regression analyses #####
+# Test Factor
+d <- data.frame(Low40=Full_20082015$Low_40, Disp=Full_20082015$Disposable_income,Unemp=Full_20082015$Perc_unemployed,Benef=Full_20082015$Perc_benefits, factor=Full_20082015$Neigh_SES)
+cor(d)
 
-##List variables to be used: Age, Gender, Household, Ethnicity, Tenure, Adress_years
+#Cronbach's alpha
+library(psych)
 
-## Nullmodels, compare fit
+d1 <- data.frame(Low40=Full_20082015$Low_40, Disp=Full_20082015$Disposable_income,Unemp=Full_20082015$Perc_unemployed,Benef=Full_20082015$Perc_benefits)
+alpha(d1, keys = c("Disp"))
+
+d2 <- data.frame(read=Full_20082015$Dutch_read,speak=Full_20082015$Dutch_speak,write=Full_20082015$Dutch_write)
+alpha(d2)
+
+library(Hmisc)
+
+Full_20082015$Dutch_prof <- (Full_20082015$Dutch_read + Full_20082015$Dutch_speak+Full_20082015$Dutch_write)/3
+describe(Full_20082015$Dutch_prof)
+
+```
+
+Regression analyses
+
+``` {r setup, include = FALSE}
+
+##List variables to be used: Age, Male, Household, Ethnicity, Tenure, (Adress_years), Labour_status, Dutch_prof, Health, Educ_ordinal, Wijk71,	Neigh_SES,	Herf_div, Turnover
+
+## remove NA both Neigh_involve and Volunteering. 1123 respondents excluded (out of 80065) => 78942
+#Dataset with all removed (78433)
+Full_20082015A <- drop_na(Full_20082015, Neigh_involve, Volunteering,Age, Male, Household, Ethnicity, Tenure, Educ_ordinal, Labour_status, Health, Dutch_prof)
+
+# create Neighbourhood-Year unique value. number of unique values: 422
+
+Full_20082015A$Neigh_year <- Full_20082015A$WAVE/100000 + Full_20082015A$Wijk71/10000
+#describe(Full_20082015$Neigh_year)
+
+# rescale Wijk 71 and WAVE
+
+Full_20082015A$Wijk71_sc <- Full_20082015A$Wijk71/10000
+#describe(Full_20082015$Wijk71_sc)
+
+Full_20082015A$WAVE_sc <- Full_20082015A$WAVE/10000
+#describe(Full_20082015$WAVE_sc)
+
+Full_20082015A <- cbind(Full_20082015A, dummy(Full_20082015A$WAVE, sep = "_"))
+
+## Mean-center contextual variables
+
+Full_20082015A$Herf_div_mean <- Full_20082015A$Herf_div - mean(Full_20082015A$Herf_div, na.rm = TRUE)
+Full_20082015A$Turnover_mean <- Full_20082015A$Turnover - mean(Full_20082015A$Turnover, na.rm = TRUE)
+
+## Mean-center Age + create Age-square, Health + Dutch_prof
+
+Full_20082015A$Age_2 <- Full_20082015A$Age^2
+Full_20082015A$Age_mean <- Full_20082015A$Age - mean(Full_20082015A$Age, na.rm=TRUE)
+Full_20082015A$Age_mean_sc <- Full_20082015A$Age_mean/10
+Full_20082015A$Age_2_mean <- Full_20082015A$Age_2 - mean(Full_20082015A$Age_2, na.rm=TRUE)
+Full_20082015A$Age_2_mean_sc <- Full_20082015A$Age_2_mean/1000
+
+
+Full_20082015A$Health_mean <- Full_20082015A$Health - mean(Full_20082015A$Health, na.rm=TRUE)
+Full_20082015A$Dutch_prof_mean <- Full_20082015A$Dutch_prof - mean(Full_20082015A$Dutch_prof, na.rm=TRUE)
+
+### Nullmodels, compare fit
 # Neigh_involve
 
-Model0 <- glm(Neigh_involve ~ 1, data = Full_20082015,family = binomial(link="logit"))
+Model0 <- glm(Neigh_involve ~ 1, data = Full_20082015A,family = binomial(link="logit"))
 summary(Model0)
 
-Model0A <- glmer(Neigh_involve ~ (1|Neigh_SES), data = Full_20082015,family = binomial(link="logit"))
-summary(Model0A)
+#Model0A <- glmer(Neigh_involve ~ (1|Neigh_SES), data = Full_20082015,family = binomial(link="logit"))
+#summary(Model0A)
 
-Model0B <- glmer(Neigh_involve ~ (1|Wijk71), data = Full_20082015,family = binomial(link="logit"))
-summary(Model0B)
+#Model0B <- glmer(Neigh_involve ~ (1|Wijk71), data = Full_20082015,family = binomial(link="logit"))
+#summary(Model0B)
 
-Model0C <- glmer(Neigh_involve ~ (1|WAVE)+ (1|Neigh_SES) , data = Full_20082015,family = binomial(link="logit"))
-summary(Model0C)
+#Model0C <- glmer(Neigh_involve ~ (1|WAVE)+ (1|Neigh_SES) , data = Full_20082015,family = binomial(link="logit"))
+#summary(Model0C)
 
-Model0D <- glmer(Neigh_involve ~ (1|Wijk71)+ (1|Neigh_SES) , data = Full_20082015,family = binomial(link="logit"))
-summary(Model0D)
+#Model0D <- glmer(Neigh_involve ~ (1|Wijk71)+ (1|Neigh_SES) , data = Full_20082015,family = binomial(link="logit"))
+#summary(Model0D)
 
-Model0E <- glmer(Neigh_involve ~ (1|Wijk71)+ (1|WAVE) , data = Full_20082015,family = binomial(link="logit"))
-summary(Model0E)
+#Model0E <- glmer(Neigh_involve ~ (1|Wijk71)+ (1|WAVE) , data = Full_20082015,family = binomial(link="logit"))
+#summary(Model0E)
 
-Model0F <- glmer(Neigh_involve ~ (1|Neigh_SES) + (1|Wijk71)+ (1|WAVE) , data = Full_20082015,family = binomial(link="logit"))
+Model0F <- glmer(Neigh_involve ~ (1|Neigh_SES) + (1|Wijk71)+ (1|WAVE) , data = Full_20082015A,family = binomial(link="logit"))
 summary(Model0F)
+
+Model0Fa <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71)+ (1|WAVE) , data = Full_20082015A,family = binomial(link="logit"))
+summary(Model0Fa)
+
+# model with unique Neighbourhood-year values does not have lower AIC or BIC
+
+
+### Models with contextual variables
+
+Model1 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean+ as.factor(Turnover_mean_5), data = Full_20082015A,family = binomial(link="logit"))
+summary(Model1)
+
+#correlations contextual variables
+
+#d3 <- data.frame(Full_20082015$Neigh_SES, Full_20082015$Herf_div, Full_20082015$Turnover)
+#cor(d3)
+
+
+
+### Model with some individual predictors. 
+
+Model1.5 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean+ Turnover_mean + Educ_ordinal + as.factor(WAVE_sc), data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
+summary(Model1.5)
+
+Model2 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Male + Household+ Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc), data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
+summary(Model2)
+
+Model2a <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Male + Household+ Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc), data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
+summary(Model2a)
+
+Model3 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc) + Labour_status + Health_mean + Dutch_prof_mean, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
+summary(Model3)
+
+mcDiagnose(Model3)
+
+Model3a <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Turnover_mean + Age_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc) + Labour_status + Health_mean + Dutch_prof_mean, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
+summary(Model3a)
+
+Model3b <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Herf_div_mean + Turnover_mean + Age_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc) + Labour_status + Health_mean + Dutch_prof_mean, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
+summary(Model3b)
+
+?glmer
+
+Model4 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc) + Labour_status + Health_mean + Dutch_prof_mean, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
+summary(Model4)
+
+
+
+## with contextuals as dummies
+
+Full_20082015A <- Full_20082015A %>% group_by(WAVE) %>% mutate(Neigh_SES_5= ntile(Neigh_SES, 5))
+Full_20082015A <- Full_20082015A %>% group_by(WAVE) %>% mutate(Herf_div_mean_5= ntile(Herf_div_mean, 5))
+Full_20082015A <- Full_20082015A %>% group_by(WAVE) %>% mutate(Turnover_mean_5= ntile(Turnover_mean, 5))
+Full_20082015A <- Full_20082015A %>% mutate(Turnover_mean_5a= ntile(Turnover_mean, 5))
+#####no significant better fits
+
+Model5 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal +  Full_20082015A_2009 + Full_20082015A_2010 + Full_20082015A_2011 +  Full_20082015A_2013 + Full_20082015A_2015  + Labour_status + Health_mean + Dutch_prof_mean + Neigh_SES:Full_20082015A_2013, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
+summary(Model5)
+
+
+
+```
+
+``` {r setup, include = FALSE}
+
+Full_20082015A$Neigh_involve_num <- as.numeric(Full_20082015A$Neigh_involve) - 1
+
+
+Gtest <- ggplot(Full_20082015A, aes(x=factor(WAVE), y=Neigh_involve_num, group=Neigh_SES_5, colour = factor(Neigh_SES_5))) 
+Gtest + stat_summary(fun.y=mean, geom="line")
+
+Gtest2 <- ggplot(Full_20082015A, aes(x=factor(WAVE), y=Neigh_involve_num, group=Herf_div_mean_5, colour = factor(Herf_div_mean_5))) 
+
+Gtest2 + stat_summary(fun.y=mean, geom="line")
+
+Gtest3 <- ggplot(Full_20082015A, aes(x=factor(WAVE), y=Neigh_involve_num, group=Educ_ordinal, colour =Educ_ordinal)) 
+
+Gtest3 + stat_summary(fun.y=mean, geom="line")
+
+Gtest4 <- ggplot(Full_20082015A, aes(x=factor(WAVE), y=Neigh_involve_num, group=Labour_status, colour =Labour_status)) 
+
+Gtest4 + stat_summary(fun.y=mean, geom="line")
+
+Gtest
+
+Full_20082015A$Volunteering_num <- as.numeric(Full_20082015A$Volunteering)
+
+Gtest_vol <- ggplot(Full_20082015A, aes(x=factor(WAVE), y=Volunteering_num, group=Neigh_SES_5, colour = factor(Neigh_SES_5))) 
+Gtest_vol + stat_summary(fun.y=mean, geom="line")
+
+Gtest_vol2 <- ggplot(Full_20082015A, aes(x=factor(WAVE), y=Volunteering_num, group=Herf_div_mean_5, colour = factor(Herf_div_mean_5))) 
+
+Gtest_vol2 + stat_summary(fun.y=mean, geom="line")
+
+Gtest_vol3 <- ggplot(Full_20082015A, aes(x=factor(WAVE), y=Volunteering_num, group=Educ_ordinal, colour = Educ_ordinal)) 
+
+Gtest_vol3 + stat_summary(fun.y=mean, geom="line")
+
+Gtest_vol4 <- ggplot(Full_20082015A, aes(x=factor(WAVE), y=Volunteering_num, group=Labour_status, colour = Labour_status)) 
+
+Gtest_vol4 + stat_summary(fun.y=mean, geom="line")
+
+?"if"
+
+```
+
+``` {r setup, include = FALSE}
 
 ### some tests with summarising and plotting data
 
@@ -1241,7 +1425,7 @@ g4+ geom_point() + geom_line()
 
 table(Full_20082015a$Labour_status, exclude = NULL)
 
-Full_20082015a <- Full_20082015a %>% group_by(WAVE,Labour_status) %>% mutate(Neigh_inv_LS = mean(Neigh_involve, na.rm=TRUE))
+Full_20082015a <- Full_20082015 %>% group_by(WAVE,Labour_status) %>% mutate(Neigh_inv_LS = mean(Neigh_involve, na.rm=TRUE))
 
 describe(Full_20082015a$Neigh_inv_LS)
 
