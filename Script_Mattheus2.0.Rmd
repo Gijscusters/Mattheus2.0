@@ -10,6 +10,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### load relevant packages
 
+rm(list = ls())
+
 library(Hmisc)
 library(tidyverse)
 library(foreign)
@@ -325,8 +327,6 @@ data2009sel$Labour_status[data2009sel$v29a==6] <- 99
 data2009sel$Labour_status[is.na(data2009sel$Labour_status)] <- 99 
 
 data2009sel$Labour_status <- factor(data2009sel$Labour_status, labels = Labour_labels, ordered = FALSE) 
-
-table(data2008sel$Labour_status, exclude = NULL)
 
 ##Volunteering
 data2009sel$v33[data2009sel$v33==2] <- 0
@@ -1249,13 +1249,24 @@ Full_20082015A$Spline2[Full_20082015A$WAVE==2015] <- 4
 Full_20082015A$Spline3 <- 0
 Full_20082015A$Spline3[Full_20082015A$WAVE==2015] <- 1
 
-table(Full_20082015A$Spline1, exclude = NULL)
+##File without WAVE 2015 (nog checken incl missings 2015)
+
+Full_20082015B <- Full_20082015A 
+Full_20082015B$WAVE[Full_20082015B$WAVE==2015] <- NA
+Full_20082015B <- drop_na(Full_20082015B, WAVE)
+
+Full_20082015B$Spline2a <- 0
+Full_20082015B$Spline2a[Full_20082015B$WAVE==2009] <- 0
+Full_20082015B$Spline2a[Full_20082015B$WAVE==2010] <- 1
+Full_20082015B$Spline2a[Full_20082015B$WAVE==2011] <- 2
+Full_20082015B$Spline2a[Full_20082015B$WAVE==2013] <- 3
+## deze gebruiken => scores pas hoger dan 0 na verandering!
 
 ### Nullmodels, compare fit
 # Neigh_involve
 
-Model0 <- glm(Neigh_involve ~ 1, data = Full_20082015A,family = binomial(link="logit"))
-summary(Model0)
+#Model0 <- glm(Neigh_involve ~ 1, data = Full_20082015A,family = binomial(link="logit"))
+#summary(Model0)
 
 #Model0A <- glmer(Neigh_involve ~ (1|Neigh_SES), data = Full_20082015,family = binomial(link="logit"))
 #summary(Model0A)
@@ -1305,6 +1316,19 @@ summary(Model1)
 #Model3 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc) + Labour_status + Health_mean + Dutch_prof_mean, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
 #summary(Model3)
 
+Model3NI <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Labour_status, data = Full_20082015B, family = binomial(link = "logit"), nAGQ = 0)
+summary(Model3NI)
+
+Model3V <- glmer(Volunteering ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Labour_status, data = Full_20082015B, family = binomial(link = "logit"), nAGQ = 0)
+summary(Model3V)
+
+Full_20082015B$Neigh_involve_num <- as.numeric(Full_20082015B$Neigh_involve) - 1
+
+
+aggregate(Neigh_involve_num ~ Labour_status, data = Full_20082015B, FUN = mean)
+aggregate(Volunteering ~ Labour_status+WAVE, data = Full_20082015B, FUN = mean)
+
+
 #mcDiagnose(Model3)
 
 #Model3a <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Turnover_mean + Age_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc) + Labour_status + Health_mean + Dutch_prof_mean, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
@@ -1341,11 +1365,19 @@ summary(Model1)
 N_Model4spl <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
 summary(N_Model4spl)
 
+N_Model4splb <- glmer(Neigh_involve ~ (1+Spline2|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
+summary(N_Model4splb)
 
 ## interaction model
 N_Model5spl <- glmer(Neigh_involve ~ (1+ Neigh_SES|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
 summary(N_Model5spl)
 
+
+N_Model5spla <- glmer(Neigh_involve ~ (1+Spline2|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
+summary(N_Model5spla)
+
+N_Model5splb <- glmer(Neigh_involve ~ (1+Spline2|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
+summary(N_Model5splb)
 
 ### Volunteering
 
@@ -1364,8 +1396,53 @@ summary(V_Model5spltest)
 
 table(Full_20082015A$Tenure, exclude = NULL)
 
+# take volunteers out of data-set (temp)
+table(Full_20082015A$Labour_status)
+
+Full_20082015B <- Full_20082015A
+Full_20082015B$Labour_status[Full_20082015B$Labour_status == "Volunteer/Other" ] <- NA
+
+N_Model5testA <- glmer(Neigh_involve ~ (1+Spline2|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
+summary(N_Model5testA)
+
+N_Model5testB <- glmer(Neigh_involve ~ (1+Spline2|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES, data = Full_20082015B,family = binomial(link="logit"), nAGQ = 0)
+summary(N_Model5testB)
+
 ### almost no differences in outcomes between nAGQ = 0 or nAGQ = 1.
 
+## tests without 2015
+
+N_M5 <- glmer(Neigh_involve ~ (1+Spline2|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline2:Neigh_SES, data = Full_20082015B,family = binomial(link="logit"), nAGQ = 0)
+summary(N_M5)
+
+N_M5a <- glmer(Neigh_involve ~ (1+Spline2a|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2a + Spline2a:Neigh_SES, data = Full_20082015B,family = binomial(link="logit"), nAGQ = 0)
+summary(N_M5a)
+
+Full_20082015B$predictN_M5a <- predict(N_M5a, type = "response", newdata = NULL)
+
+Predictplot <- ggplot(Full_20082015B, aes(x=factor(Spline2a), y=predictN_M5a, group=Neigh_SES_5, linetype = factor(Neigh_SES_5)))
+
+Predictplot + stat_summary(fun.y=mean, geom="line")+ stat_summary(fun.data = mean_cl_normal, geom = "linerange")+ expand_limits(y=c(0.15,0.35))
+
+V_M5 <- glmer(Volunteering ~ (1+Spline2|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline2:Neigh_SES, data = Full_20082015B,family = binomial(link="logit"), nAGQ = 0)
+summary(V_M5)
+
+V_M5a <- glmer(Volunteering ~ (1+Spline2a|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2a + Spline2a:Neigh_SES, data = Full_20082015B,family = binomial(link="logit"), nAGQ = 0)
+summary(V_M5a)
+
+Full_20082015B$predictV_M5a <- predict(V_M5a, type = "response", newdata = NULL)
+
+Predictplot2 <- ggplot(Full_20082015B, aes(x=factor(Spline2a), y=predictV_M5a, group=Neigh_SES_5, linetype = factor(Neigh_SES_5)))
+
+Predictplot2 + stat_summary(fun.y=mean, geom="line") + stat_summary(fun.data = mean_cl_normal, geom = "linerange") + expand_limits(y=c(0.15,0.35))
+
+plot_age2 <- ggplot(Full_20082015B, aes(x=Age, y=predictV_M5a))
+plot_age2 + stat_summary(fun.y=mean, geom="line") + stat_summary(fun.data = mean_cl_normal, geom = "linerange")
+
+plot_age2a <- ggplot(Full_20082015B, aes(x=Age, y=Volunteering))
+plot_age2a + stat_summary(fun.y=mean, geom="line")
+
+?stat_summary
 
 ## further testing model Model5splA by omitting variables
 #omit + Dutch_prof_mean
@@ -1392,15 +1469,37 @@ table(Full_20082015A$Tenure, exclude = NULL)
 
 describe(Full_20082015A$Neigh_SES)
 
-Full_20082015A$predictModel5splA <- predict(Model5splA, type = "response", newdata = NULL)
+Full_20082015A$predictN_Model5testA <- predict(N_Model5testA, type = "response", newdata = NULL)
 
-Predictplot <- ggplot(Full_20082015A, aes(x=factor(WAVE), y=predictModel5splA, group=Neigh_SES_5, colour = factor(Neigh_SES_5),shape = factor(Neigh_SES_5)))
-Predictplot + stat_summary(fun.y=mean, geom="line")+ stat_summary(fun.y=mean, geom = "point")+ expand_limits(y=c(0.15,0.35))
+Predictplot <- ggplot(Full_20082015A, aes(x=factor(Spline2), y=predictN_Model5testA, group=Neigh_SES_5, linetype = factor(Neigh_SES_5)))
 
-?stat_smooth
+Predictplot + stat_summary(fun.y=mean, geom="line") + expand_limits(y=c(0.15,0.35))
 
+Predictplot + geom_line()
+
+?stat_summary
+
+?margins
+?predict
 
 Predictplot + stat_smooth(se=FALSE)
+
+predictdata <-  data.frame(Neigh_SES_5 = seq(1,5, length = 5))
+predictdata$test <- predict(N_Model5splb, type = "response", newdata = predictdata)
+
+rm(predictdata)
+
+#predictdata2 <- expand.grid(Educ_ordinal=unique(Full_20082015B$Educ_ordinal),Labour_status=unique(Full_20082015B$Labour_status),Age_mean_sc=unique(Full_20082015B$Age_mean_sc),Age_2_mean_sc=unique(Full_20082015B$Age_2_mean_sc),Male=unique(Full_20082015B$Male),Household=unique(Full_20082015B$Household),Ethnicity=unique(Full_20082015B$Ethnicity),Tenure=unique(Full_20082015B$Tenure),Health_mean=unique(Full_20082015B$Health_mean),Dutch_prof_mean=unique(Full_20082015B$Dutch_prof_mean),Dutch_prof_mean=unique(Full_20082015B$Dutch_prof_mean),Neigh_SES=unique(Full_20082015B$Neigh_SES),Herf_div_mean=unique(Full_20082015B$Herf_div_mean),Turnover_mean=unique(Full_20082015B$Turnover_mean),Spline1=unique(Full_20082015B$Spline1),Spline2=unique(Full_20082015B$Spline2),Spline3=unique(Full_20082015B$Spline3))
+# te lange vectors met alle combi's                          
+
+View(predictdata2)
+                          
+                          
+Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES
+
+## maak nieuwe datasets met combinatie uniquevalues. (zie syntax luc) 
+
+    
 
 ```
 
@@ -1434,6 +1533,19 @@ G_vol + stat_summary(fun.y=mean,position = position_dodge(0.15), geom="line")+ s
 ``` {r setup, include = FALSE}
 
 ### some tests with summarising and plotting data
+
+## Participation by Neigh SES per wave (influential cases?)
+
+G_out_V <- ggplot(Full_20082015A, aes(x=Neigh_SES,y=Volunteering_num))
+G_out_V + stat_summary(fun.y = mean, geom = "point") + facet_wrap(~WAVE) + geom_smooth()
+
+Full_20082015Atest <- Full_20082015A %>% group_by(WAVE, Wijk71) %>% summarise(mean_V = mean(Volunteering_num))
+
+table(Full_20082015A$mean_Volunteering)
+
+
+??geom
+
 
 Full_20082015a <- Full_20082015
 Full_20082015a$Neigh_involve <- as.numeric(Full_20082015$Neigh_involve) - 1
