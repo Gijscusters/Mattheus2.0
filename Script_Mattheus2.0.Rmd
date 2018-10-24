@@ -10,7 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### load relevant packages
 
-
 rm(list = ls())
 
 library(Hmisc)
@@ -1039,10 +1038,10 @@ Full_20082009 <- full_join(data2008seldef, data2009seldef)
 Full_20082010 <- full_join(Full_20082009, data2010seldef)
 Full_20082011 <- full_join(Full_20082010, data2011seldef)
 Full_20082013 <- full_join(Full_20082011, data2013seldef)                                  
-Full_20082015 <- full_join(Full_20082013, data2015seldef)
+#Full_20082015 <- full_join(Full_20082013, data2015seldef)
 
 #post-correction
-Full_20082015$Labour_status[Full_20082015$WAVE==2015 & Full_20082015$Labour_status=="Volunteer/Other"] <- "Missing"
+#Full_20082015$Labour_status[Full_20082015$WAVE==2015 & Full_20082015$Labour_status=="Volunteer/Other"] <- "Missing"
 
 
 ############ Analysis ######################
@@ -1065,24 +1064,24 @@ wpct(data2011seldef$Neigh_involve, data2011seldef$GEWICHT_STAD)
 prop.table(table(data2013seldef$Neigh_involve))
 wpct(data2013seldef$Neigh_involve, data2013seldef$GEWICHT_STAD)
 
-prop.table(table(data2015seldef$Neigh_involve))
-wpct(data2015seldef$Neigh_involve, data2015seldef$GEWICHT_STAD)
+#prop.table(table(data2015seldef$Neigh_involve))
+#wpct(data2015seldef$Neigh_involve, data2015seldef$GEWICHT_STAD)
 
-Full_20082015$Perc_N_inv <- NA
-Full_20082015$Perc_N_inv[Full_20082015$WAVE==2008] <- 0.2357796
-Full_20082015$Perc_N_inv[Full_20082015$WAVE==2009] <- 0.2326045
-Full_20082015$Perc_N_inv[Full_20082015$WAVE==2010] <- 0.2304046
-Full_20082015$Perc_N_inv[Full_20082015$WAVE==2011] <- 0.2337748 
-Full_20082015$Perc_N_inv[Full_20082015$WAVE==2013] <- 0.2339587
-Full_20082015$Perc_N_inv[Full_20082015$WAVE==2015] <- 0.2749579
+Full_20082013$Perc_N_inv <- NA
+Full_20082013$Perc_N_inv[Full_20082013$WAVE==2008] <- 0.2357796
+Full_20082013$Perc_N_inv[Full_20082013$WAVE==2009] <- 0.2326045
+Full_20082013$Perc_N_inv[Full_20082013$WAVE==2010] <- 0.2304046
+Full_20082013$Perc_N_inv[Full_20082013$WAVE==2011] <- 0.2337748 
+Full_20082013$Perc_N_inv[Full_20082013$WAVE==2013] <- 0.2339587
+#Full_20082013$Perc_N_inv[Full_20082013$WAVE==2013] <- 0.2749579
 
-Full_20082015$Perc_N_inv_w <- NA
-Full_20082015$Perc_N_inv_w[Full_20082015$WAVE==2008] <- 0.2266144
-Full_20082015$Perc_N_inv_w[Full_20082015$WAVE==2009] <- 0.2262049
-Full_20082015$Perc_N_inv_w[Full_20082015$WAVE==2010] <- 0.2183327
-Full_20082015$Perc_N_inv_w[Full_20082015$WAVE==2011] <- 0.2194426 
-Full_20082015$Perc_N_inv_w[Full_20082015$WAVE==2013] <- 0.2164532
-Full_20082015$Perc_N_inv_w[Full_20082015$WAVE==2015] <- 0.2550027
+Full_20082013$Perc_N_inv_w <- NA
+Full_20082013$Perc_N_inv_w[Full_20082013$WAVE==2008] <- 0.2266144
+Full_20082013$Perc_N_inv_w[Full_20082013$WAVE==2009] <- 0.2262049
+Full_20082013$Perc_N_inv_w[Full_20082013$WAVE==2010] <- 0.2183327
+Full_20082013$Perc_N_inv_w[Full_20082013$WAVE==2011] <- 0.2194426 
+Full_20082013$Perc_N_inv_w[Full_20082013$WAVE==2013] <- 0.2164532
+#Full_20082015$Perc_N_inv_w[Full_20082015$WAVE==2015] <- 0.2550027
 
 #Volunteering
 prop.table(table(data2008seldef$Volunteering))
@@ -1100,39 +1099,39 @@ wpct(data2011seldef$Volunteering, data2011seldef$GEWICHT_STAD)
 prop.table(table(data2013seldef$Volunteering))
 wpct(data2013seldef$Volunteering, data2013seldef$GEWICHT_STAD)
 
-prop.table(table(data2015seldef$Volunteering))
-wpct(data2015seldef$Volunteering, data2015seldef$GEWICHT_STAD)
+#prop.table(table(data2015seldef$Volunteering))
+#wpct(data2015seldef$Volunteering, data2015seldef$GEWICHT_STAD)
 
-Full_20082015$Perc_Volunteer <- NA
-Full_20082015$Perc_Volunteer[Full_20082015$WAVE==2008] <- 0.2304545 
-Full_20082015$Perc_Volunteer[Full_20082015$WAVE==2009] <- 0.2379408
-Full_20082015$Perc_Volunteer[Full_20082015$WAVE==2010] <- 0.2326607
-Full_20082015$Perc_Volunteer[Full_20082015$WAVE==2011] <- 0.2178457 
-Full_20082015$Perc_Volunteer[Full_20082015$WAVE==2013] <- 0.2213054
-Full_20082015$Perc_Volunteer[Full_20082015$WAVE==2015] <- 0.2462245
+Full_20082013$Perc_Volunteer <- NA
+Full_20082013$Perc_Volunteer[Full_20082013$WAVE==2008] <- 0.2304545 
+Full_20082013$Perc_Volunteer[Full_20082013$WAVE==2009] <- 0.2379408
+Full_20082013$Perc_Volunteer[Full_20082013$WAVE==2010] <- 0.2326607
+Full_20082013$Perc_Volunteer[Full_20082013$WAVE==2011] <- 0.2178457 
+Full_20082013$Perc_Volunteer[Full_20082013$WAVE==2013] <- 0.2213054
+#Full_20082013$Perc_Volunteer[Full_20082013$WAVE==2013] <- 0.2462245
 
-Full_20082015$Perc_Volunteer_w <- NA
-Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2008] <- 0.219716 
-Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2009] <- 0.2279223
-Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2010] <- 0.2266389
-Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2011] <- 0.2118029 
-Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2013] <- 0.2132327
-Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2015] <- 0.2346285
+Full_20082013$Perc_Volunteer_w <- NA
+Full_20082013$Perc_Volunteer_w[Full_20082013$WAVE==2008] <- 0.219716 
+Full_20082013$Perc_Volunteer_w[Full_20082013$WAVE==2009] <- 0.2279223
+Full_20082013$Perc_Volunteer_w[Full_20082013$WAVE==2010] <- 0.2266389
+Full_20082013$Perc_Volunteer_w[Full_20082013$WAVE==2011] <- 0.2118029 
+Full_20082013$Perc_Volunteer_w[Full_20082013$WAVE==2013] <- 0.2132327
+#Full_20082015$Perc_Volunteer_w[Full_20082015$WAVE==2015] <- 0.2346285
 
 ## Chi-square tests (with/without 2015)
 
-Chitest_N_inv <- table(Full_20082013$WAVE, Full_20082013$Neigh_involve)
-chisq.test(Chitest_N_inv)
+#Chitest_N_inv <- table(Full_20082013$WAVE, Full_20082013$Neigh_involve)
+#chisq.test(Chitest_N_inv)
 
-Chitest_Volunteer <- table(Full_20082013$WAVE, Full_20082013$Volunteering)
-chisq.test(Chitest_Volunteer)
+#Chitest_Volunteer <- table(Full_20082013$WAVE, Full_20082013$Volunteering)
+#chisq.test(Chitest_Volunteer)
 
 
-Chitest_N_inv1 <- table(Full_20082015$WAVE, Full_20082015$Neigh_involve)
-chisq.test(Chitest_N_inv1)
+#Chitest_N_inv1 <- table(Full_20082015$WAVE, Full_20082015$Neigh_involve)
+#chisq.test(Chitest_N_inv1)
 
-Chitest_Volunteer1 <- table(Full_20082015$WAVE, Full_20082015$Volunteering)
-chisq.test(Chitest_Volunteer1)
+#Chitest_Volunteer1 <- table(Full_20082015$WAVE, Full_20082015$Volunteering)
+#chisq.test(Chitest_Volunteer1)
 
 ### plotting trend in neighbourhood involvement and volunteering
 
@@ -1147,38 +1146,35 @@ chisq.test(Chitest_Volunteer1)
 
 ## unweighted plot
 
-Full_20082015.long2 <- melt(Full_20082015, id = "WAVE", measure = c("Perc_N_inv","Perc_Volunteer"))
-Fig1 <- ggplot(Full_20082015.long2, aes(WAVE, value, group=variable))
-Fig1 + geom_line(aes(linetype=variable), position=position_dodge(0.15)) + expand_limits(y=c(0.175,0.325)) + geom_point(aes(shape=variable),position=position_dodge(0.15), size=2.5) + scale_x_continuous(breaks = c(2008,2009,2010,2011,2012,2013,2014,2015)) + xlab("Year of survey") + ylab("% Civic participation")+ theme_bw() + labs(shape="Civic participation", linetype="Civic participation") + scale_shape_discrete(labels = c("Neighbourhood involvement","Volunteering"))+  scale_linetype_discrete(labels = c("Neighbourhood involvement","Volunteering"))
+#Full_20082013.long2 <- melt(Full_20082013, id = "WAVE", measure = c("Perc_N_inv","Perc_Volunteer"))
+#Fig1 <- ggplot(Full_20082013.long2, aes(WAVE, value, group=variable))
+#Fig1 + geom_line(aes(linetype=variable), position=position_dodge(0.15)) + expand_limits(y=c(0.175,0.3)) + geom_point(aes(shape=variable),position=position_dodge(0.15), size=2.5) + scale_x_continuous(breaks = c(2008,2009,2010,2011,2012,2013)) + xlab("Year of survey") + ylab("% Civic participation")+ theme_bw() + labs(shape="Civic participation", linetype="Civic participation") + scale_shape_discrete(labels = c("Neighbourhood involvement","Volunteering"))+  scale_linetype_discrete(labels = c("Neighbourhood involvement","Volunteering"))
 
 ## factor analysis neighbourhood SES + save scores
 
-fa <- factanal(~Low_40+Disposable_income+Perc_unemployed+Perc_benefits, factors = 1, data = Full_20082015, scores = "regression")
-
+fa <- factanal(~Low_40+Disposable_income+Perc_unemployed+Perc_benefits, factors = 1, data = Full_20082013, scores = "regression")
 fa
 
-Full_20082015 <- cbind(Full_20082015, fa$scores)
-Full_20082015$Neigh_SES <- 0 - Full_20082015$Factor1
-
-describe(Full_20082015$Neigh_SES)
+Full_20082013 <- cbind(Full_20082013, fa$scores)
+Full_20082013$Neigh_SES <- 0 - Full_20082013$Factor1
 
 # Test Factor
-d <- data.frame(Low40=Full_20082015$Low_40, Disp=Full_20082015$Disposable_income,Unemp=Full_20082015$Perc_unemployed,Benef=Full_20082015$Perc_benefits, factor=Full_20082015$Neigh_SES)
-cor(d)
+#d <- data.frame(Low40=Full_20082013$Low_40,Disp=Full_20082013$Disposable_income,Unemp=Full_20082013$Perc_unemployed,Benef=Full_20082013$Perc_benefits, factor=Full_20082013$Neigh_SES)
+#cor(d)
 
 #Cronbach's alpha
 library(psych)
 
-d1 <- data.frame(Low40=Full_20082015$Low_40, Disp=Full_20082015$Disposable_income,Unemp=Full_20082015$Perc_unemployed,Benef=Full_20082015$Perc_benefits)
+d1 <- data.frame(Low40=Full_20082013$Low_40, Disp=Full_20082013$Disposable_income,Unemp=Full_20082013$Perc_unemployed,Benef=Full_20082013$Perc_benefits)
 alpha(d1, keys = c("Disp"))
 
-d2 <- data.frame(read=Full_20082015$Dutch_read,speak=Full_20082015$Dutch_speak,write=Full_20082015$Dutch_write)
+d2 <- data.frame(read=Full_20082013$Dutch_read,speak=Full_20082013$Dutch_speak,write=Full_20082013$Dutch_write)
 alpha(d2)
 
 library(Hmisc)
 
-Full_20082015$Dutch_prof <- (Full_20082015$Dutch_read + Full_20082015$Dutch_speak+Full_20082015$Dutch_write)/3
-describe(Full_20082015$Dutch_prof)
+Full_20082013$Dutch_prof <- (Full_20082013$Dutch_read + Full_20082013$Dutch_speak+Full_20082013$Dutch_write)/3
+describe(Full_20082013$Dutch_prof)
 
 ```
 
@@ -1190,77 +1186,90 @@ Regression analyses
 
 ## remove NA both Neigh_involve and Volunteering. 1123 respondents excluded (out of 80065) => 78942
 #Dataset with all removed (78433)
-Full_20082015A <- drop_na(Full_20082015, Neigh_involve, Volunteering,Age, Male, Household, Ethnicity, Tenure, Educ_ordinal, Labour_status, Health, Dutch_prof)
+##for 2008-2013: 1005 respondents excluded (out of 65486)
+
+Full_20082013A <- drop_na(Full_20082013, Neigh_involve, Volunteering,Age, Male, Household, Ethnicity, Tenure, Educ_ordinal, Labour_status, Health, Dutch_prof)
 
 # create Neighbourhood-Year unique value. number of unique values: 422
+# for: 2018-2013: ...
+Full_20082013A$Neigh_year <- Full_20082013A$WAVE/100000 + Full_20082013A$Wijk71/10000
+#describe(Full_20082013A$Neigh_year)
 
-Full_20082015A$Neigh_year <- Full_20082015A$WAVE/100000 + Full_20082015A$Wijk71/10000
-#describe(Full_20082015$Neigh_year)
+# rescale Wijk71 and WAVE
+Full_20082013A$Wijk71_sc <- Full_20082013A$Wijk71/10000
+#describe(Full_20082013$Wijk71_sc)
 
-# rescale Wijk 71 and WAVE
+Full_20082013A$WAVE_sc <- Full_20082013A$WAVE/10000
+#describe(Full_20082013$WAVE_sc)
 
-Full_20082015A$Wijk71_sc <- Full_20082015A$Wijk71/10000
-#describe(Full_20082015$Wijk71_sc)
 
-Full_20082015A$WAVE_sc <- Full_20082015A$WAVE/10000
-#describe(Full_20082015$WAVE_sc)
+##dummies for descriptives
+Full_20082013A <- cbind(Full_20082013A, dummy(Full_20082013A$WAVE, sep = "_"))
+Full_20082013A$Educ_ordinal1 <- as.numeric(Full_20082013A$Educ_ordinal)
+Full_20082013A <- cbind(Full_20082013A, dummy(Full_20082013A$Educ_ordinal1, sep = ":"))
+Full_20082013A$Educ_ordinal1 <- as.numeric(Full_20082013A$Educ_ordinal)
+Full_20082013A$Male_num <- as.numeric(Full_20082013A$Male)
+Full_20082013A$Household1 <- as.numeric(Full_20082013A$Household)
+Full_20082013A <- cbind(Full_20082013A, dummy(Full_20082013A$Household1, sep = "-"))
+Full_20082013A$Ethnicity1 <- as.numeric(Full_20082013A$Ethnicity)
+Full_20082013A <- cbind(Full_20082013A, dummy(Full_20082013A$Ethnicity1, sep = "="))
+Full_20082013A$Tenure1 <- as.numeric(Full_20082013A$Tenure)
+Full_20082013A <- cbind(Full_20082013A, dummy(Full_20082013A$Tenure1, sep = "+"))
 
-Full_20082015A <- cbind(Full_20082015A, dummy(Full_20082015A$WAVE, sep = "_"))
+# group economically inactive
+Full_20082013A$Labour_status4 <- recode(Full_20082013A$Labour_status,"'Student' = 'Inactive'; 'Household' = 'Inactive';'Retired' = 'Inactive';'Volunteer/Other' = 'Inactive'")
+Full_20082013A$Labour_status4 <- relevel(Full_20082013A$Labour_status4, ref = "Works>12h")
+
+Full_20082013A$Labour_status41 <- as.numeric(Full_20082013A$Labour_status4)
+Full_20082013A <- cbind(Full_20082013A, dummy(Full_20082013A$Labour_status41, sep = "^"))
 
 ## Mean-center contextual variables
 
-Full_20082015A$Herf_div_mean <- Full_20082015A$Herf_div - mean(Full_20082015A$Herf_div, na.rm = TRUE)
-Full_20082015A$Turnover_mean <- Full_20082015A$Turnover - mean(Full_20082015A$Turnover, na.rm = TRUE)
+Full_20082013A$Herf_div_mean <- Full_20082013A$Herf_div - mean(Full_20082013A$Herf_div, na.rm = TRUE)
+Full_20082013A$Turnover_mean <- Full_20082013A$Turnover - mean(Full_20082013A$Turnover, na.rm = TRUE)
 
 ## Mean-center Age + create Age-square, Health + Dutch_prof
 
-Full_20082015A$Age_2 <- Full_20082015A$Age^2
-Full_20082015A$Age_mean <- Full_20082015A$Age - mean(Full_20082015A$Age, na.rm=TRUE)
-Full_20082015A$Age_mean_sc <- Full_20082015A$Age_mean/10
-Full_20082015A$Age_2_mean <- Full_20082015A$Age_2 - mean(Full_20082015A$Age_2, na.rm=TRUE)
-Full_20082015A$Age_2_mean_sc <- Full_20082015A$Age_2_mean/1000
+Full_20082013A$Age_2 <- Full_20082013A$Age^2
+Full_20082013A$Age_mean <- Full_20082013A$Age - mean(Full_20082013A$Age, na.rm=TRUE)
+Full_20082013A$Age_mean_sc <- Full_20082013A$Age_mean/10
+Full_20082013A$Age_2_mean <- Full_20082013A$Age_2 - mean(Full_20082013A$Age_2, na.rm=TRUE)
+Full_20082013A$Age_2_mean_sc <- Full_20082013A$Age_2_mean/1000
 
 
-Full_20082015A$Health_mean <- Full_20082015A$Health - mean(Full_20082015A$Health, na.rm=TRUE)
-Full_20082015A$Dutch_prof_mean <- Full_20082015A$Dutch_prof - mean(Full_20082015A$Dutch_prof, na.rm=TRUE)
+Full_20082013A$Health_mean <- Full_20082013A$Health - mean(Full_20082013A$Health, na.rm=TRUE)
+Full_20082013A$Dutch_prof_mean <- Full_20082013A$Dutch_prof - mean(Full_20082013A$Dutch_prof, na.rm=TRUE)
 
 ## with contextuals as dummies
 
-Full_20082015A <- Full_20082015A %>% group_by(WAVE) %>% mutate(Neigh_SES_5= ntile(Neigh_SES, 5))
-Full_20082015A <- Full_20082015A %>% group_by(WAVE) %>% mutate(Neigh_SES_10= ntile(Neigh_SES, 10))
-Full_20082015A <- Full_20082015A %>% group_by(WAVE) %>% mutate(Herf_div_mean_5= ntile(Herf_div_mean, 5))
-Full_20082015A <- Full_20082015A %>% group_by(WAVE) %>% mutate(Turnover_mean_5= ntile(Turnover_mean, 5))
+Full_20082013A <- Full_20082013A %>% group_by(WAVE) %>% mutate(Neigh_SES_5= ntile(Neigh_SES, 5))
+#Full_20082015A <- Full_20082015A %>% group_by(WAVE) %>% mutate(Neigh_SES_10= ntile(Neigh_SES, 10))
+#Full_20082015A <- Full_20082015A %>% group_by(WAVE) %>% mutate(Herf_div_mean_5= ntile(Herf_div_mean, 5))
+#Full_20082015A <- Full_20082015A %>% group_by(WAVE) %>% mutate(Turnover_mean_5= ntile(Turnover_mean, 5))
 
 #### construction of three spline coefficients (based on plot Neigh_SES_5, Neigh_involve)
 
-# first spline: small changes 2009-2009
-Full_20082015A$Spline1 <- 0
-Full_20082015A$Spline1[Full_20082015A$WAVE==2008] <- 1
+# first spline: small changes 2008-2009
+Full_20082013A$Spline1 <- 0
+Full_20082013A$Spline1[Full_20082013A$WAVE==2008] <- 1
 
 # second spline: decline/rise 2009-2013
-Full_20082015A$Spline2 <- 0
-Full_20082015A$Spline2[Full_20082015A$WAVE==2009] <- 1
-Full_20082015A$Spline2[Full_20082015A$WAVE==2010] <- 2
-Full_20082015A$Spline2[Full_20082015A$WAVE==2011] <- 3
-Full_20082015A$Spline2[Full_20082015A$WAVE==2013] <- 4
-Full_20082015A$Spline2[Full_20082015A$WAVE==2015] <- 4
+#Full_20082015A$Spline2 <- 0
+#Full_20082015A$Spline2[Full_20082015A$WAVE==2009] <- 1
+#Full_20082015A$Spline2[Full_20082015A$WAVE==2010] <- 2
+#Full_20082015A$Spline2[Full_20082015A$WAVE==2011] <- 3
+#Full_20082015A$Spline2[Full_20082015A$WAVE==2013] <- 4
+#Full_20082015A$Spline2[Full_20082015A$WAVE==2015] <- 4
 
 # third spline
+#Full_20082015A$Spline3 <- 0
+#Full_20082015A$Spline3[Full_20082015A$WAVE==2015] <- 1
 
-Full_20082015A$Spline3 <- 0
-Full_20082015A$Spline3[Full_20082015A$WAVE==2015] <- 1
-
-##File without WAVE 2015 (nog checken incl missings 2015)
-
-Full_20082015B <- Full_20082015A 
-Full_20082015B$WAVE[Full_20082015B$WAVE==2015] <- NA
-Full_20082015B <- drop_na(Full_20082015B, WAVE)
-
-Full_20082015B$Spline2a <- 0
-Full_20082015B$Spline2a[Full_20082015B$WAVE==2009] <- 0
-Full_20082015B$Spline2a[Full_20082015B$WAVE==2010] <- 1
-Full_20082015B$Spline2a[Full_20082015B$WAVE==2011] <- 2
-Full_20082015B$Spline2a[Full_20082015B$WAVE==2013] <- 3
+Full_20082013A$Spline2a <- 0
+Full_20082013A$Spline2a[Full_20082013A$WAVE==2009] <- 0
+Full_20082013A$Spline2a[Full_20082013A$WAVE==2010] <- 1
+Full_20082013A$Spline2a[Full_20082013A$WAVE==2011] <- 2
+Full_20082013A$Spline2a[Full_20082013A$WAVE==2013] <- 3
 ## deze gebruiken => scores pas hoger dan 0 na verandering!
 
 ### Nullmodels, compare fit
@@ -1295,8 +1304,8 @@ summary(Model0Fa)
 
 ### Models with contextual variables
 
-Model1 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean+ Turnover_mean, data = Full_20082015A,family = binomial(link="logit"))
-summary(Model1)
+#Model1 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean+ Turnover_mean, data = Full_20082015A,family = binomial(link="logit"))
+#summary(Model1)
 
 #correlations contextual variables
 
@@ -1305,202 +1314,108 @@ summary(Model1)
 
 ### Model with some individual predictors. 
 
-#Model1.5 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean+ Turnover_mean + Educ_ordinal + as.factor(WAVE_sc), data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model1.5)
+#Model2NI <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Labour_status, data = Full_20082015B, family = binomial(link = "logit"), nAGQ = 0)
+#summary(Model2NI)
 
-#Model2 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Male + Household+ Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc), data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model2)
+#Model2V <- glmer(Volunteering ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Labour_status, data = Full_20082015B, family = binomial(link = "logit"), nAGQ = 0)
+#summary(Model2V)
 
-#Model2a <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Male + Household+ Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc), data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model2a)
+#Full_20082015B$Neigh_involve_num <- as.numeric(Full_20082015B$Neigh_involve) - 1
 
-#Model3 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc) + Labour_status + Health_mean + Dutch_prof_mean, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model3)
+#aggregate(Neigh_involve_num ~ Labour_status, data = Full_20082015B, FUN = mean)
+#aggregate(Volunteering ~ Labour_status+WAVE, data = Full_20082015B, FUN = mean)
 
-Model3NI <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Labour_status, data = Full_20082015B, family = binomial(link = "logit"), nAGQ = 0)
-summary(Model3NI)
-
-Model3V <- glmer(Volunteering ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Labour_status, data = Full_20082015B, family = binomial(link = "logit"), nAGQ = 0)
-summary(Model3V)
-
-Full_20082015B$Neigh_involve_num <- as.numeric(Full_20082015B$Neigh_involve) - 1
-
-
-aggregate(Neigh_involve_num ~ Labour_status, data = Full_20082015B, FUN = mean)
-aggregate(Volunteering ~ Labour_status+WAVE, data = Full_20082015B, FUN = mean)
-
-
-#mcDiagnose(Model3)
-
-#Model3a <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Turnover_mean + Age_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc) + Labour_status + Health_mean + Dutch_prof_mean, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model3a)
-
-#Model3b <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Herf_div_mean + Turnover_mean + Age_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc) + Labour_status + Health_mean + Dutch_prof_mean, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model3b)
-
-#Model4 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal + as.factor(WAVE_sc) + Labour_status + Health_mean + Dutch_prof_mean, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model4)
-
-#####no significant better fits with context dummies
-
-#Model5 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal +  Full_20082015A_2009 + Full_20082015A_2010 + Full_20082015A_2011 +  Full_20082015A_2013 + Full_20082015A_2015  + Labour_status + Health_mean + Dutch_prof_mean + Neigh_SES:Full_20082015A_2013, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model5)
-
-#Model5a <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal +  Full_20082015A_2008 + Full_20082015A_2010 + Full_20082015A_2011 +  Full_20082015A_2013 + Full_20082015A_2015  + Labour_status + Health_mean + Dutch_prof_mean + factor(Neigh_SES_5):Full_20082015A_2013, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model5a)
-
-
-# Volunteering test
-
-#Model5aV <- glmer(Volunteering ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal +  Full_20082015A_2009 + Full_20082015A_2010 + Full_20082015A_2011 +  Full_20082015A_2013 + Full_20082015A_2015  + Labour_status + Health_mean + Dutch_prof_mean + factor(Neigh_SES_5):Full_20082015A_2013, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model5aV)
-
+#### no significant better fits with context dummies
 
 #### analyses with spline coefficients ####
 
-### Neighbourhoog involvement
+### Neighbourhood involvement
 
-#Model1spl <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Spline1 + Spline2 + Spline3, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model1spl)
-
-N_Model4spl <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-summary(N_Model4spl)
-
-N_Model4splb <- glmer(Neigh_involve ~ (1+Spline2|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-summary(N_Model4splb)
-
-## interaction model
-N_Model5spl <- glmer(Neigh_involve ~ (1+ Neigh_SES|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-summary(N_Model5spl)
+#Model2_NI <- glmer(Neigh_involve ~ (1+Spline2a|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2a, data = Full_20082013A,family = binomial(link="logit"))
 
 
-N_Model5spla <- glmer(Neigh_involve ~ (1+Spline2|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-summary(N_Model5spla)
+#Model3_NI <- glmer(Neigh_involve ~ (1+Spline2a|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2a + Spline2a:Neigh_SES, data = Full_20082013A,family = binomial(link="logit"))
 
-N_Model5splb <- glmer(Neigh_involve ~ (1+Spline2|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-summary(N_Model5splb)
 
 ### Volunteering
 
-V_Model4spl <- glmer(Volunteering ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-summary(V_Model4spl)
+#Model2_V <- glmer(Volunteering ~ (1+Spline2a|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2a, data = Full_20082013A,family = binomial(link="logit"))
 
-v9_labels
 
-## interaction model
-V_Model5spl <- glmer(Volunteering ~ (1+ Neigh_SES|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-summary(V_Model5spl)
+#Model3_V <- glmer(Volunteering ~ (1+Spline2a|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2a + Spline2a:Neigh_SES, data = Full_20082013A,family = binomial(link="logit"))
 
-# test -Age^2
-V_Model5spltest <- glmer(Volunteering ~ (1+ Neigh_SES|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal +  Labour_status + Health_mean + Dutch_prof_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-summary(V_Model5spltest)
 
-table(Full_20082015A$Tenure, exclude = NULL)
+Full_20082013A$Neigh_involve_num <- as.numeric(Full_20082013A$Neigh_involve) - 1
 
-# take volunteers out of data-set (temp)
-table(Full_20082015A$Labour_status)
+#aggregate(Neigh_involve_num ~ Labour_status4 + WAVE, data = Full_20082013A, FUN = mean)
+#aggregate(Neigh_involve_num ~ Household, data = Full_20082013A, FUN = mean)
 
-Full_20082015B <- Full_20082015A
-Full_20082015B$Labour_status[Full_20082015B$Labour_status == "Volunteer/Other" ] <- NA
+#aggregate(Volunteering ~ Labour_status4, data = Full_20082013A, FUN = mean)
+#aggregate(Neigh_involve_num ~ Household, data = Full_20082013A, FUN = mean)
 
-N_Model5testA <- glmer(Neigh_involve ~ (1+Spline2|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-summary(N_Model5testA)
+#Model <- glmer(Volunteering ~ (1|Neigh_year) + (1|Wijk71)+ (1|WAVE) +Labour_status4, data = Full_20082013A,family = binomial(link="logit"))
+#summary(Model)
 
-N_Model5testB <- glmer(Neigh_involve ~ (1+Spline2|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES, data = Full_20082015B,family = binomial(link="logit"), nAGQ = 0)
-summary(N_Model5testB)
+
+Model2_NIa <- glmer(Neigh_involve ~ (1+Spline2a|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status4 + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2a, data = Full_20082013A,family = binomial(link="logit"), nAGQ = 0)
+summary(Model2_NIa)
+
+Model3_NIa <- glmer(Neigh_involve ~ (1+Spline2a|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status4 + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2a + Spline2a:Neigh_SES, data = Full_20082013A,family = binomial(link="logit"), nAGQ = 0)
+summary(Model3_NIa)
+
+Model2_Va <- glmer(Volunteering ~ (1+Spline2a|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status4 + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2a, data = Full_20082013A,family = binomial(link="logit"), nAGQ = 0)
+summary(Model2_Va)
+
+Model3_Va <- glmer(Volunteering ~ (1+Spline2a|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status4 + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2a + Spline2a:Neigh_SES, data = Full_20082013A,family = binomial(link="logit"), nAGQ = 0)
+summary(Model3_Va)
+
+65449.9 - 65435.3
+1 - pchisq ( 14.6, 1)
+
+66073.7 - 66066.8
+1 - pchisq ( 6.9, 1)
 
 ### almost no differences in outcomes between nAGQ = 0 or nAGQ = 1.
 
-## tests without 2015
 
-N_M5 <- glmer(Neigh_involve ~ (1+Spline2|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline2:Neigh_SES, data = Full_20082015B,family = binomial(link="logit"), nAGQ = 0)
-summary(N_M5)
+#### plotting predicted values
 
-N_M5a <- glmer(Neigh_involve ~ (1+Spline2a|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2a + Spline2a:Neigh_SES, data = Full_20082015B,family = binomial(link="logit"), nAGQ = 0)
-summary(N_M5a)
+Full_20082013A$predict_Model3_NIa <- predict(Model3_NIa, type = "response", newdata = NULL)
 
-Full_20082015B$predictN_M5a <- predict(N_M5a, type = "response", newdata = NULL)
+Full_20082013A$Spline2aplot <-Full_20082013A$Spline2a 
+Full_20082013A$Spline2aplot[Full_20082013A$Spline2a==3] <- 4
 
-Predictplot <- ggplot(Full_20082015B, aes(x=factor(Spline2a), y=predictN_M5a, group=Neigh_SES_5, linetype = factor(Neigh_SES_5)))
+Predictplot_NI <- ggplot(Full_20082013A, aes(x=Spline2aplot, y=predict_Model3_NIa, group=Neigh_SES_5, linetype = factor(Neigh_SES_5)))
+Predictplot_NI + stat_summary(fun.y=mean, geom="line")+ stat_summary(fun.y=mean, geom="point") +stat_summary(fun.data = mean_cl_normal, geom = "linerange")+ expand_limits(y=c(0.15,0.35)) + xlab("Year of survey") + ylab("Predicted prob. neighbourhood involvement")+ theme_bw() + labs(linetype="Neighbourhood SES\n(quintiles)") + scale_x_continuous(breaks = c(0,1,2,3,4),labels = c("2009","2010","2011","2012","2013")) + guides(linetype=guide_legend(reverse = TRUE))
 
-Predictplot + stat_summary(fun.y=mean, geom="line")+ stat_summary(fun.data = mean_cl_normal, geom = "linerange")+ expand_limits(y=c(0.15,0.35))
+#aggregate(predict_Model3_NIa ~ Spline2a + Neigh_SES_5,data = Full_20082013A, FUN=mean)
+#0.1938202 -  0.2197004
+#0.2828357 -  0.2622455
 
-V_M5 <- glmer(Volunteering ~ (1+Spline2|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline2:Neigh_SES, data = Full_20082015B,family = binomial(link="logit"), nAGQ = 0)
-summary(V_M5)
+Full_20082013A$predict_Model3_Va <- predict(Model3_Va, type = "response", newdata = NULL)
 
-V_M5a <- glmer(Volunteering ~ (1+Spline2a|Neigh_SES) + (1|Wijk71_sc)+ (1|WAVE_sc) + Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2a + Spline2a:Neigh_SES, data = Full_20082015B,family = binomial(link="logit"), nAGQ = 0)
-summary(V_M5a)
+Predictplot_V <- ggplot(Full_20082013A, aes(x=Spline2aplot, y=predict_Model3_Va, group=Neigh_SES_5, linetype = factor(Neigh_SES_5)))
+Predictplot_V + stat_summary(fun.y=mean, geom="line")+ stat_summary(fun.y=mean, geom="point") +stat_summary(fun.data = mean_cl_normal, geom = "linerange")+ expand_limits(y=c(0.15,0.35))+ xlab("Year of survey") + ylab("Predicted prob. volunteering")+ theme_bw() + labs(linetype="Neighbourhood SES\n(quintiles)") + scale_x_continuous(breaks = c(0,1,2,3,4),labels = c("2009","2010","2011","2012","2013")) + guides(linetype=guide_legend(reverse = TRUE))
 
-Full_20082015B$predictV_M5a <- predict(V_M5a, type = "response", newdata = NULL)
+#aggregate(predict_Model3_Va ~ Spline2a + Neigh_SES_5,data = Full_20082013A, FUN=mean)
+#0.3015945 - 0.2533663
 
-Predictplot2 <- ggplot(Full_20082015B, aes(x=factor(Spline2a), y=predictV_M5a, group=Neigh_SES_5, linetype = factor(Neigh_SES_5)))
+ 
+  
+### relationship between age and participation
 
-Predictplot2 + stat_summary(fun.y=mean, geom="line") + stat_summary(fun.data = mean_cl_normal, geom = "linerange") + expand_limits(y=c(0.15,0.35))
+#plot_age <- ggplot(Full_20082013A, aes(x=Age, y=predict_Model3_NIa))
+#plot_age + stat_summary(fun.y=mean, geom="line") 
 
-plot_age2 <- ggplot(Full_20082015B, aes(x=Age, y=predictV_M5a))
-plot_age2 + stat_summary(fun.y=mean, geom="line") + stat_summary(fun.data = mean_cl_normal, geom = "linerange")
-
-plot_age2a <- ggplot(Full_20082015B, aes(x=Age, y=Volunteering))
-plot_age2a + stat_summary(fun.y=mean, geom="line")
-
-?stat_summary
-
-## further testing model Model5splA by omitting variables
-#omit + Dutch_prof_mean
-#Model5splA1 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal + Spline1 + Spline2 + Spline3  + Labour_status + Health_mean +  Neigh_SES:Spline2, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model5splA1)
-
-# + Labour status
-#Model5splA2 <- glmer(Neigh_involve ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal + Spline1 + Spline2 + Spline3 + Health_mean +  Neigh_SES:Spline2, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model5splA2)
-
-### Volunteering
-
-#Model4splVOL <- glmer(Volunteering ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure + Educ_ordinal + Spline1 + Spline2 + Spline3  + Labour_status + Health_mean + Dutch_prof_mean, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model4splVOL)
+#plot_age2 <- ggplot(Full_20082013A, aes(x=Age, y=predict_Model3_Va))
+#plot_age2 + stat_summary(fun.y=mean, geom="line") 
 
 
-#Model5splVOL <- glmer(Volunteering ~ (1|Neigh_year) + (1|Wijk71_sc)+ (1|WAVE_sc) + Neigh_SES + Herf_div_mean + Turnover_mean + Age_mean_sc  + Male + Household + Ethnicity + Tenure + Educ_ordinal + Spline1 + Spline2 + Spline3  + Labour_status + Health_mean + Dutch_prof_mean + Neigh_SES:Spline2, data = Full_20082015A,family = binomial(link="logit"), nAGQ = 0)
-#summary(Model5splVOL)
+#### table descriptives
 
-#mcDiagnose(Model5splVOL)
+library(Deducer)
 
-
-#### tests with plotting predicted values
-
-describe(Full_20082015A$Neigh_SES)
-
-Full_20082015A$predictN_Model5testA <- predict(N_Model5testA, type = "response", newdata = NULL)
-
-Predictplot <- ggplot(Full_20082015A, aes(x=factor(Spline2), y=predictN_Model5testA, group=Neigh_SES_5, linetype = factor(Neigh_SES_5)))
-
-Predictplot + stat_summary(fun.y=mean, geom="line") + expand_limits(y=c(0.15,0.35))
-
-Predictplot + geom_line()
-
-?stat_summary
-
-?margins
-?predict
-
-Predictplot + stat_smooth(se=FALSE)
-
-predictdata <-  data.frame(Neigh_SES_5 = seq(1,5, length = 5))
-predictdata$test <- predict(N_Model5splb, type = "response", newdata = predictdata)
-
-rm(predictdata)
-
-#predictdata2 <- expand.grid(Educ_ordinal=unique(Full_20082015B$Educ_ordinal),Labour_status=unique(Full_20082015B$Labour_status),Age_mean_sc=unique(Full_20082015B$Age_mean_sc),Age_2_mean_sc=unique(Full_20082015B$Age_2_mean_sc),Male=unique(Full_20082015B$Male),Household=unique(Full_20082015B$Household),Ethnicity=unique(Full_20082015B$Ethnicity),Tenure=unique(Full_20082015B$Tenure),Health_mean=unique(Full_20082015B$Health_mean),Dutch_prof_mean=unique(Full_20082015B$Dutch_prof_mean),Dutch_prof_mean=unique(Full_20082015B$Dutch_prof_mean),Neigh_SES=unique(Full_20082015B$Neigh_SES),Herf_div_mean=unique(Full_20082015B$Herf_div_mean),Turnover_mean=unique(Full_20082015B$Turnover_mean),Spline1=unique(Full_20082015B$Spline1),Spline2=unique(Full_20082015B$Spline2),Spline3=unique(Full_20082015B$Spline3))
-# te lange vectors met alle combi's                          
-
-View(predictdata2)
-                          
-                          
-Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household + Ethnicity + Tenure +  Health_mean + Dutch_prof_mean + Neigh_SES + Herf_div_mean + Turnover_mean + Spline1 + Spline2 + Spline3 + Spline2:Neigh_SES
-
-## maak nieuwe datasets met combinatie uniquevalues. (zie syntax luc) 
-
-    
+descriptive.table(vars = d(Volunteering,Neigh_involve_num,`Full_20082013A:1`,`Full_20082013A:2`,`Full_20082013A:3`,`Full_20082013A:4`,`Full_20082013A:5`,`Full_20082013A^1`,`Full_20082013A^2`,`Full_20082013A^3`,`Full_20082013A^4`,Age, Age_2,Male_num,`Full_20082013A-1`,`Full_20082013A-2`,`Full_20082013A-3`,`Full_20082013A-4`,`Full_20082013A-5`,`Full_20082013A=1`,`Full_20082013A=2`,`Full_20082013A=3`,`Full_20082013A=4`,`Full_20082013A=5`,`Full_20082013A=6`,`Full_20082013A=7`,`Full_20082013A+1`,`Full_20082013A+2`,`Full_20082013A+3`, Health, Dutch_prof, Neigh_SES, Herf_div_mean , Turnover_mean), data =Full_20082013A, func.names = c("Mean","St. Deviation", "Minimum","Maximum","Valid N"))
 
 ```
 
@@ -1508,12 +1423,11 @@ Educ_ordinal +  Labour_status + Age_mean_sc + Age_2_mean_sc + Male + Household +
 
 #### plots split by neighbourhood variables
 
-## Neighbourhood involvment
+## Neighbourhood involvement
 
-Full_20082015A$Neigh_involve_num <- as.numeric(Full_20082015A$Neigh_involve) - 1
+G_neigh <- ggplot(Full_20082013A, aes(x=WAVE, y=Neigh_involve_num, group=Neigh_SES_5, linetype = factor(Neigh_SES_5),shape = factor(Neigh_SES_5))) 
+G_neigh + stat_summary(fun.y=mean,position = position_dodge(0.15), geom="line")+ stat_summary(fun.y=mean,position = position_dodge(0.15), geom = "point")+ expand_limits(y=c(0.15,0.35))+ scale_x_continuous(breaks = c(2008,2009,2010,2011,2012,2013))+ labs(x="Year of survey",y="% Neighbourhood involvement",shape="Neighbourhood SES\n(quintiles)", linetype="Neighbourhood SES\n(quintiles)") + guides(shape=guide_legend(reverse = TRUE), linetype=guide_legend(reverse = TRUE)) + theme_bw()
 
-G_neigh <- ggplot(Full_20082015A, aes(x=WAVE, y=Neigh_involve_num, group=Neigh_SES_5, linetype = factor(Neigh_SES_5),shape = factor(Neigh_SES_5))) 
-G_neigh + stat_summary(fun.y=mean,position = position_dodge(0.15), geom="line")+ stat_summary(fun.y=mean,position = position_dodge(0.15), geom = "point")+ expand_limits(y=c(0.15,0.35))+ scale_x_continuous(breaks = c(2008,2009,2010,2011,2012,2013,2014,2015))+ labs(x="Year of survey",y="% Neighbourhood involvement",shape="Neighbourhood SES (quintiles)", linetype="Neighbourhood SES (quintiles)") + guides(shape=guide_legend(reverse = TRUE), linetype=guide_legend(reverse = TRUE)) + theme_bw()
 
 #G2 <- ggplot(Full_20082015A, aes(x=WAVE, y=Neigh_involve_num, group=Herf_div_mean_5, linetype = factor(Herf_div_mean_5),shape = factor(Herf_div_mean_5))) 
 #G2 + stat_summary(fun.y=mean,position = position_dodge(0.15), geom="line")+ stat_summary(fun.y=mean,position = position_dodge(0.15), geom = "point")+ expand_limits(y=c(0.15,0.35))+ scale_x_continuous(breaks = c(2008,2009,2010,2011,2012,2013,2014,2015))+ labs(x="Year of survey",y="% Neighbourhood involvement",shape="Diversity - Herfindahl (quintiles)", linetype="Diversity - Herfindahl (quintiles)")  + theme_bw()
@@ -1521,13 +1435,12 @@ G_neigh + stat_summary(fun.y=mean,position = position_dodge(0.15), geom="line")+
 #G3 <- ggplot(Full_20082015A, aes(x=WAVE, y=Neigh_involve_num, group=Turnover_mean_5, linetype = factor(Turnover_mean_5),shape = factor(Turnover_mean_5))) 
 #G3 + stat_summary(fun.y=mean,position = position_dodge(0.15), geom="line")+ stat_summary(fun.y=mean,position = position_dodge(0.15), geom = "point")+ expand_limits(y=c(0.15,0.35))+ scale_x_continuous(breaks = c(2008,2009,2010,2011,2012,2013,2014,2015))+ labs(x="Year of survey",y="% Neighbourhood involvement",shape="Turnover rate (quintiles)", linetype="Turnover rate (quintiles)")  + theme_bw()
 
-
 ## Volunteering
 
-Full_20082015A$Volunteering_num <- as.numeric(Full_20082015A$Volunteering)
+Full_20082013A$Volunteering_num <- as.numeric(Full_20082013A$Volunteering)
 
-G_vol <- ggplot(Full_20082015A, aes(x=WAVE, y=Volunteering_num, group=Neigh_SES_5, linetype = factor(Neigh_SES_5),shape = factor(Neigh_SES_5))) 
-G_vol + stat_summary(fun.y=mean,position = position_dodge(0.15), geom="line")+ stat_summary(fun.y=mean,position = position_dodge(0.15), geom = "point")+ expand_limits(y=c(0.15,0.35))+ scale_x_continuous(breaks = c(2008,2009,2010,2011,2012,2013,2014,2015))+ labs(x="Year of survey",y="% Volunteering",shape="Neighbourhood SES (quintiles)", linetype="Neighbourhood SES (quintiles)") + guides(shape=guide_legend(reverse = TRUE), linetype=guide_legend(reverse = TRUE)) + theme_bw()
+G_vol <- ggplot(Full_20082013A, aes(x=WAVE, y=Volunteering_num, group=Neigh_SES_5, linetype = factor(Neigh_SES_5),shape = factor(Neigh_SES_5))) 
+G_vol + stat_summary(fun.y=mean,position = position_dodge(0.15), geom="line")+ stat_summary(fun.y=mean,position = position_dodge(0.15), geom = "point")+ expand_limits(y=c(0.15,0.35))+ scale_x_continuous(breaks = c(2008,2009,2010,2011,2012,2013))+ labs(x="Year of survey",y="% Volunteering",shape="Neighbourhood SES\n(quintiles)", linetype="Neighbourhood SES\n(quintiles)") + guides(shape=guide_legend(reverse = TRUE), linetype=guide_legend(reverse = TRUE)) + theme_bw()
 
 ```
 
@@ -1539,14 +1452,6 @@ G_vol + stat_summary(fun.y=mean,position = position_dodge(0.15), geom="line")+ s
 
 G_out_V <- ggplot(Full_20082015A, aes(x=Neigh_SES,y=Volunteering_num))
 G_out_V + stat_summary(fun.y = mean, geom = "point") + facet_wrap(~WAVE) + geom_smooth()
-
-Full_20082015Atest <- Full_20082015A %>% group_by(WAVE, Wijk71) %>% summarise(mean_V = mean(Volunteering_num))
-
-table(Full_20082015A$mean_Volunteering)
-
-
-??geom
-
 
 Full_20082015a <- Full_20082015
 Full_20082015a$Neigh_involve <- as.numeric(Full_20082015$Neigh_involve) - 1
@@ -1622,7 +1527,10 @@ g4+ geom_point() + geom_line()
 
 table(Full_20082015a$Labour_status, exclude = NULL)
 
-Full_20082015a <- Full_20082015 %>% group_by(WAVE,Labour_status) %>% mutate(Neigh_inv_LS = mean(Neigh_involve, na.rm=TRUE))
+Full_20082015a <- Full_20082015
+Full_20082015a$Neigh_involve <- as.numeric(Full_20082015a$Neigh_involve) - 1
+
+Full_20082015a <- Full_20082015a %>% group_by(WAVE,Labour_status) %>% mutate(Neigh_inv_LS = mean(Neigh_involve, na.rm=TRUE))
 
 describe(Full_20082015a$Neigh_inv_LS)
 
@@ -1651,6 +1559,69 @@ wpct(Full_20082015a$Neigh_involve_w)
 ?factanal
 
 Labour_labels
+
+
+### check corrections factanal per year
+
+ table(Full_20082013A$Neigh_SES_5, Full_20082013A$WAVE)
+aggregate(Volunteering ~ WAVE  + Neigh_SES_5,data = Full_20082013A, FUN = "mean")
+
+datatest <- Full_20082013A %>%  select(Volunteering, Neigh_involve, Neigh_SES, Neigh_SES_5, WAVE)
+ 
+
+fa1 <- factanal(~Low_40+Disposable_income+Perc_unemployed+Perc_benefits, factors = 1, data = data2008seldef, scores = "regression")
+fa1
+
+data2008seldef <- cbind(data2008seldef, fa1$scores)
+data2008seldef$Neigh_SES <- 0 - data2008seldef$Factor1
+data2008seldef <- data2008seldef %>%mutate(Neigh_SES_5= ntile(Neigh_SES, 5))
+
+
+fa2 <- factanal(~Low_40+Disposable_income+Perc_unemployed+Perc_benefits, factors = 1, data = data2009seldef, scores = "regression")
+fa2
+
+data2009seldef <- cbind(data2009seldef, fa2$scores)
+data2009seldef$Neigh_SES <- 0 - data2009seldef$Factor1
+data2009seldef <- data2009seldef %>%mutate(Neigh_SES_5= ntile(Neigh_SES, 5))
+
+fa3 <- factanal(~Low_40+Disposable_income+Perc_unemployed+Perc_benefits, factors = 1, data = data2010seldef, scores = "regression")
+fa3
+
+data2010seldef <- cbind(data2010seldef, fa3$scores)
+data2010seldef$Neigh_SES <- 0 - data2010seldef$Factor1
+data2010seldef <- data2010seldef %>%mutate(Neigh_SES_5= ntile(Neigh_SES, 5))
+
+fa4 <- factanal(~Low_40+Disposable_income+Perc_unemployed+Perc_benefits, factors = 1, data = data2011seldef, scores = "regression")
+fa4
+
+data2011seldef <- cbind(data2011seldef, fa4$scores)
+data2011seldef$Neigh_SES <- 0 - data2011seldef$Factor1
+data2011seldef <- data2011seldef %>%mutate(Neigh_SES_5= ntile(Neigh_SES, 5))
+
+fa5 <- factanal(~Low_40+Disposable_income+Perc_unemployed+Perc_benefits, factors = 1, data = data2013seldef, scores = "regression")
+fa5
+
+data2013seldef <- cbind(data2013seldef, fa5$scores)
+data2013seldef$Neigh_SES <- 0 - data2013seldef$Factor1
+data2013seldef <- data2013seldef %>%mutate(Neigh_SES_5= ntile(Neigh_SES, 5))
+
+Full_20082009e <- full_join(data2008seldef, data2009seldef)
+Full_20082010e <- full_join(Full_20082009e, data2010seldef)
+Full_20082011e <- full_join(Full_20082010e, data2011seldef)
+Full_20082013e <- full_join(Full_20082011e, data2013seldef) 
+
+Full_20082013eA <- drop_na(Full_20082013e, Neigh_involve, Volunteering,Age, Male, Household, Ethnicity, Tenure, Educ_ordinal, Labour_status, Health)
+
+
+Full_20082013eA$Neigh_involve_num <- as.numeric(Full_20082013eA$Neigh_involve) - 1
+
+G_neigh <- ggplot(Full_20082013eA, aes(x=WAVE, y=Neigh_involve_num, group=Neigh_SES_5, linetype = factor(Neigh_SES_5),shape = factor(Neigh_SES_5))) 
+G_neigh + stat_summary(fun.y=mean,position = position_dodge(0.15), geom="line")+ stat_summary(fun.y=mean,position = position_dodge(0.15), geom = "point")+ expand_limits(y=c(0.15,0.35))+ scale_x_continuous(breaks = c(2008,2009,2010,2011,2012,2013))+ labs(x="Year of survey",y="% Neighbourhood involvement",shape="Neighbourhood SES (quintiles)", linetype="Neighbourhood SES (quintiles)") + guides(shape=guide_legend(reverse = TRUE), linetype=guide_legend(reverse = TRUE)) + theme_bw()
+
+Full_20082013eA$Volunteering_num <- as.numeric(Full_20082013eA$Volunteering)
+
+G_vol <- ggplot(Full_20082013eA, aes(x=WAVE, y=Volunteering_num, group=Neigh_SES_5, linetype = factor(Neigh_SES_5),shape = factor(Neigh_SES_5))) 
+G_vol + stat_summary(fun.y=mean,position = position_dodge(0.15), geom="line")+ stat_summary(fun.y=mean,position = position_dodge(0.15), geom = "point")+ expand_limits(y=c(0.15,0.35))+ scale_x_continuous(breaks = c(2008,2009,2010,2011,2012,2013))+ labs(x="Year of survey",y="% Volunteering",shape="Neighbourhood SES (quintiles)", linetype="Neighbourhood SES (quintiles)") + guides(shape=guide_legend(reverse = TRUE), linetype=guide_legend(reverse = TRUE)) + theme_bw()
 
 ```
 
